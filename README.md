@@ -12,13 +12,29 @@ optimized, near zero-copy rendering, speedy template engine that produces
 statically typed, plain java object templates that are compiled along with the
 rest of your project.
 
-This project makes Rocker a first-class citizen to Ninja.  You can access utility
-properties and methods for Ninja using the ```@N``` variable.  For example,
-the following would lookup an asset:
+This project makes Rocker templates a first-class citizen to Ninja. All
+Ninja-specific functionality is provided by way of the `N` variable that is
+available to all templates. Here is a quick sample that demoes a few of the
+most common features
 
-    @args ()
+```html
+@import controllers.Application
 
-    @N.assetsAt("css/app.css")
+@args (String title)
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>@title</title>
+    <link rel='stylesheet' href='@N.webJarsAt("bootstrap/3.3.2-1/css/bootstrap.min.css")'>
+    <link rel='stylesheet' href='@N.assetsAt("css/app.css")'>
+</head>
+<body>
+    Hi!
+    <a href='@N.reverseRoute(Application.class, "index")'/>Home</a>
+</body>
+</html>
+```
 
 ## Setup
 
