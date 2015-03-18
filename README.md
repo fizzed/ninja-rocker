@@ -63,14 +63,15 @@ with a suffix of `.rocker.html`.
 
 There is a Ninja app in the `demo` folder that demonstrates all the functionality
 this module provides and it's a simple way to see how it works.  Run the following
-in your shell:
+in your shell (from the root project directory, not in `demo`):
 
     mvn -Pninja-run test
 
 Once running, point your browser to http://localhost:8080/
 
 If you'd like to see how simple hot-reloading works as you modify either the 
-Java code or a Rocker template, open up a second shell and run:
+Java code or a Rocker template, open up a second shell and run the following
+ (from the root project directory, not in `demo`):
 
     mvn fizzed-watcher:run
 
