@@ -14,8 +14,8 @@ rest of your project.
 
 This project makes Rocker templates a first-class citizen to Ninja. All
 Ninja-specific functionality is provided by way of the `N` variable that is
-available to all templates. Here is a quick sample that demoes a few of the
-most common features
+available to all templates. Here is a quick sample of what a `index.rocker.html`
+template may look like
 
 ```html
 @import controllers.Application
@@ -36,6 +36,22 @@ most common features
 </html>
 ```
 
+Once compiled into your project, you can call this template from your Ninja
+controller.  Fully type safe and compile-time checked that the first parameter
+is a String.
+
+```java
+public class Application {
+    
+    public Result index() {
+        return Results.ok().render(
+            views.index.template("Home")
+        );
+    }
+
+}
+```
+
 ## Setup
 
 ### Add dependency
@@ -52,7 +68,9 @@ Add the ninja-rocker-module dependency to your pom.xml:
 
 ### Install module
 
-Add the module to your conf/Module.java file:
+Add the module to your conf/Module.java file. Once installed, Rocker will
+replace the default FreeMarker template engine for all content with the type
+of "text/html".
 
 ```java
 package conf;
@@ -69,6 +87,13 @@ public class Module extends AbstractModule {
 
 }
 ```
+
+### Integrate Rocker with your build system
+
+Since Rocker relies on compiled templates, you'll need to integrate Rocker's
+parser & compiler into your build process.  Instructions are on the
+[Rocker project](https://github.com/fizzed/rocker) site.  You can also check
+out our demo application (more details below) to see it all together.
 
 ### Write templates
 
