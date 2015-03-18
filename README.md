@@ -125,7 +125,7 @@ Any time you edit a file, the fizzed-watcher maven plugin will trigger a maven
 for any changed templates.  Ninja will restart and your new changes will be
 available.
 
-## Ninja `N`
+## Ninja variable
 
 Easiest way to discover all the properties and methods available in the `N`
 variable is to take a look at [NinjaRocker.java](https://github.com/fizzed/ninja-rocker/blob/master/module/src/main/java/com/fizzed/ninja/rocker/NinjaRocker.java).
