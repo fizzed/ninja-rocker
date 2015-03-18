@@ -1,0 +1,7 @@
+name: "ninja-rocker-demo"
+domain: "com.fizzed"
+display_name: "ninja-rocker-demo"
+short_description: "Ninja Rocker Template Demo Webapp"
+type: DAEMON
+main_class: "ninja.standalone.NinjaJetty"
+platforms: [ WINDOWS, LINUX, MAC_OSX ]

@@ -1,0 +1,29 @@
+@import controllers.Application
+
+@main.template("Home") -> {
+<div>
+    <h3>Rocker Templates + NinjaFramework</h3>
+    
+    <ul>
+        <li>Rocker library v@com.fizzed.rocker.Version.getVersion()</li>
+        <li>Ninja Rocker module v@com.fizzed.ninja.rocker.Version.getVersion()</li>
+        <li>Ninja v@Application.readNinjaVersion()</li>
+    </ul>
+    
+    <h4 style="margin-top:20px;">Features</h4>
+    <ul>
+        <li><a href='@N.reverseRoute(Application.class, "ninja")'>Ninja-specific features</a></li>
+        <li><a href='@N.reverseRoute(Application.class, "ninja")?lang=de'>Ninja-specific features (with German set as lang)</a></li>
+    </ul>
+    
+    <h4 style="margin-top:20px;">Error pages (these can all be customized)</h4>
+    <ul>
+        <li><a href='@N.reverseRoute(Application.class, "template_error")'>Template error (null pointer exception during render)</a></li>
+        <li><a href='@N.reverseRoute(Application.class, "app_error")'>App error page (customized per this app)</a></li>
+        <li><a href='@N.reverseRoute(Application.class, "bad_request")'>Bad request</a></li>
+        <li><a href='@N.reverseRoute(Application.class, "forbidden")'>Forbidden</a></li>
+        <li><a href='@N.reverseRoute(Application.class, "not_authorized")'>Not authorized</a></li>
+        <li><a href='/not_found'>Not found</a></li>
+    </ul>
+</div>
+}

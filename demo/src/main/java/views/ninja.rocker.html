@@ -1,0 +1,54 @@
+@import java.util.Map
+
+@main.template("Ninja-specific features") -> {
+
+<div>
+    <h3>Ninja-specific features</h3>
+    
+    <br/>
+
+    <h4>Mode</h4>
+    
+    <code>
+    @@N.isDev()
+    @@N.isTest()
+    @@N.isProd()
+    </code>
+    
+    <p>Ninja is running in <b>@if (N.isDev()) {DEV} else {@if (N.isTest()) {TEST} else {PROD}}</b> mode.</p>
+    
+    <h4>Context Path</h4>
+    
+    <p>The context path of this app is: @N.contextPath</p>
+    
+    <h4 style="margin-top: 20px;">i18n</h4>
+    
+    <p>
+        <b>Sample key lookup:</b> hello = @N.i18n("hello")</br>
+        <b>Another Sample key lookup:</b> world = @N.i18n("world")</br>
+        <b>Sample key with argument:</b> hello_world = @N.i18n("hello_world", N.i18n("world"))
+    </p>
+    
+    <h4 style="margin-top: 20px;">Assets At</h4>
+    
+    <p>Path to logo in nav: @N.assetsAt("img/fizzed.png")</p>
+    
+    <h4 style="margin-top: 20px;">WebJars At</h4>
+    
+    <p>Path to bootstrap css: @N.webJarsAt("bootstrap/3.3.2-1/css/bootstrap.min.css")</p>
+    
+    <h4 style="margin-top: 20px;">Sessions</h4>
+    
+    All active session data:
+    <ul>
+    @if (N.session != null) {
+        @for ((k,v) : N.session) {
+            <li>@k: @v</li>
+        }
+    } else {
+        <li>No session data</li>
+    }
+    </ul>
+</div>
+
+}
