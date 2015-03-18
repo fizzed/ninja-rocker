@@ -33,6 +33,11 @@ template would look like using a few of the most common Ninja features.
     Hi!
     <a href='@N.reverseRoute(Application.class, "index")'/>Home</a>
 </body>
+<script type="text/javascript">
+@if (N.isProd()) {
+    /* production-only code (e.g. google analytics) */
+}
+</script>
 </html>
 ```
 
