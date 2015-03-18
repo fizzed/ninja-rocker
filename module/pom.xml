@@ -8,14 +8,13 @@
     <parent>
         <groupId>com.fizzed</groupId>
         <artifactId>ninja-rocker</artifactId>
-        <version>0.9.0</version>
+        <version>0.9.0-SNAPSHOT</version>
     </parent>
     
     <scm>
         <url>https://github.com/fizzed/ninja-rocker</url>
         <connection>scm:git:git@github.com:fizzed/ninja-rocker.git</connection>
-      <tag>v0.9.0</tag>
-  </scm>
+    </scm>
     
     <properties>
         <main.java.package>com.fizzed.ninja.rocker</main.java.package>
