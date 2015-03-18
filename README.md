@@ -15,7 +15,7 @@ rest of your project.
 This project makes Rocker templates a first-class citizen to Ninja. All
 Ninja-specific functionality is provided by way of the `N` variable that is
 available to all templates. Here is a quick sample of what a `index.rocker.html`
-template may look like
+template would look like using a few of the most common Ninja features.
 
 ```html
 @import controllers.Application
@@ -37,8 +37,7 @@ template may look like
 ```
 
 Once compiled into your project, you can call this template from your Ninja
-controller.  Fully type safe and compile-time checked that the first parameter
-is a String.
+controller.  Fully type safe and compile-time checked.
 
 ```java
 public class Application {
