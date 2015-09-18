@@ -66,7 +66,7 @@ Add the ninja-rocker-module dependency to your pom.xml:
 <dependency>
     <groupId>com.fizzed</groupId>
     <artifactId>ninja-rocker-module</artifactId>
-    <version>0.9.0</version>
+    <version>0.9.1</version>
 </dependency>
 ```
 
