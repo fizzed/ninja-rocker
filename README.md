@@ -130,3 +130,33 @@ available.
 Easiest way to discover all the properties and methods available in the `N`
 variable is to take a look at [NinjaRocker.java](https://github.com/fizzed/ninja-rocker/blob/master/module/src/main/java/com/fizzed/ninja/rocker/NinjaRocker.java).
 
+## Common issues
+
+If your project won't compile and you see compiler warnings like:
+
+    [ERROR] /fizzed/java-ninja-rocker/demo/target/generated-sources/rocker/views/ninja.java:[162,65] cannot find symbol
+    [ERROR] symbol:   variable N
+
+You most likely did not configure your rocker maven plugin to extend templates
+from <code>com.fizzed.ninja.rocker.NinjaRockerTemplate</code> rather than the
+default of <code>com.fizzed.rocker.runtime.DefaultRockerTemplate</code>.  The "N"
+variable is defined in <code>com.fizzed.ninja.rocker.NinjaRockerTemplate</code>.
+
+The configuration section for your rocker plugin for maven should look like this:
+
+    <plugin>
+        <groupId>com.fizzed</groupId>
+        <artifactId>rocker-maven-plugin</artifactId>
+        <version>0.9.0</version>
+        <executions>
+            <execution>
+                <id>generate-rocker-templates</id>
+                <goals>
+                    <goal>generate</goal>
+                </goals>
+                <configuration>
+                    <extendsClass>com.fizzed.ninja.rocker.NinjaRockerTemplate</extendsClass>
+                </configuration>
+            </execution>
+        </executions>
+    </plugin>
