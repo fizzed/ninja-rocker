@@ -124,33 +124,25 @@ public class TemplateEngineRocker implements TemplateEngine {
         Object object = result.getRenderable();
         
         // various types of objects renderable may store
-        Map<String,Object> valueMap = null;
         Message valueMessage = null;
         NinjaRockerTemplate rockerTemplate = null;
         
         
         // if the object is null we simply render an empty map...
         if (object == null) {            
-            valueMap = Collections.EMPTY_MAP;
+            throw renderingOrRuntimeException("Renderable was null. You must pass an instance of a NinjaRockerTemplate the Result.render() method.", null);
         }
-        else if (object instanceof NinjaRockerTemplate) {            
+        else if (object instanceof NinjaRockerTemplate) {
             rockerTemplate = (NinjaRockerTemplate)object;   
         }
         else if (object instanceof RockerTemplate) {
-            log.error("Only templates with a parent type of NinjaRockerTemplate are supported by this engine");
-            log.error("Did you forget to configure your rocker maven build plugin to 'extendsClass' from com.fizzed.ninja.rocker.NinjaRockerTemplate?");
-            return;
-        }
-        else if (object instanceof Map) {            
-            valueMap = (Map<String,Object>)object;    
+            throw renderingOrRuntimeException("Only templates with a parent class type of NinjaRockerTemplate are supported by this engine. " +
+                                        "Did you forget to configure your rocker maven build plugin to 'extendsClass' from com.fizzed.ninja.rocker.NinjaRockerTemplate?", null);
         }
         else if (object instanceof Message) {
+            // acceptable in case of system errors...
             valueMessage = (Message)object;
         }
-        else {
-            log.error("Unable to handle renderable not of type: " + object.getClass());
-            return;
-        } 
 
         //
         // until NinjaFramework makes these template names configurable -- these
@@ -158,6 +150,7 @@ public class TemplateEngineRocker implements TemplateEngine {
         //
         if (rockerTemplate == null) {
             String templateName = result.getTemplate();
+            
             if (templateName != null && commonErrorTemplates.containsKey(templateName)) {
                 Class<? extends NinjaRockerTemplate> commonErrorType = commonErrorTemplates.get(templateName);
 
@@ -176,16 +169,13 @@ public class TemplateEngineRocker implements TemplateEngine {
                 }
 
                 rockerTemplate = rockerErrorTemplate;
+            } else {
+                throw renderingOrRuntimeException("Renderable object was not of class type 'NinjaRockerTemplate'. Rather it was of type '" + object.getClass().getSimpleName() + "'. You must pass an instance of NinjaRockerTemplate to the Result.render() method.", null);
             }
         }
-        
-        if (rockerTemplate != null) {
-            // inject context for ninja into template, then delegate rendering to itself
-            rockerTemplate.ninjaRender(ninjaRockerContext, context, result);
-        }
-        else {
-            throw new RuntimeException("Something really fishy. No idea how to handle this request");
-        }
+
+        // inject context for ninja into template, then delegate rendering to itself
+        rockerTemplate.ninjaRender(ninjaRockerContext, context, result);
     }
     
     
@@ -209,7 +199,7 @@ public class TemplateEngineRocker implements TemplateEngine {
             Constructor<?> constructor = ninjaRenderingExceptionClass.getDeclaredConstructor(
                     String.class, Throwable.class, Result.class, String.class, String.class, int.class);
             
-            return (RuntimeException)constructor.newInstance(cause.getMessage(),
+            return (RuntimeException)constructor.newInstance(message,
                                                                 cause,
                                                                 result,
                                                                 "Rocker rendering exception",
