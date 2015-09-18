@@ -17,6 +17,8 @@
 package com.fizzed.ninja.rocker;
 
 import com.fizzed.ninja.rocker.views.common_error;
+import com.fizzed.rocker.RockerTemplate;
+import com.fizzed.rocker.runtime.DefaultRockerTemplate;
 import java.util.Map;
 
 import javax.inject.Singleton;
@@ -133,6 +135,11 @@ public class TemplateEngineRocker implements TemplateEngine {
         }
         else if (object instanceof NinjaRockerTemplate) {            
             rockerTemplate = (NinjaRockerTemplate)object;   
+        }
+        else if (object instanceof RockerTemplate) {
+            log.error("Only templates with a parent type of NinjaRockerTemplate are supported by this engine");
+            log.error("Did you forget to configure your rocker maven build plugin to 'extendsClass' from com.fizzed.ninja.rocker.NinjaRockerTemplate?");
+            return;
         }
         else if (object instanceof Map) {            
             valueMap = (Map<String,Object>)object;    

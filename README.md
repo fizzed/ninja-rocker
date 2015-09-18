@@ -132,6 +132,13 @@ variable is to take a look at [NinjaRocker.java](https://github.com/fizzed/ninja
 
 ## Common issues
 
+If your Ninja project compiles and runs, but you get a runtime error like this:
+
+    ERROR c.f.n.rocker.TemplateEngineRocker - Unable to handle renderable not of type: class views.ApplicationController.helloWorld
+
+You likely forgot to configure your rocker maven plugin to "extendsClass" from
+code>com.fizzed.ninja.rocker.NinjaRockerTemplate</code>. See below for more info.
+
 If your project won't compile and you see compiler warnings like:
 
     [ERROR] /fizzed/java-ninja-rocker/demo/target/generated-sources/rocker/views/ninja.java:[162,65] cannot find symbol
