@@ -3,7 +3,7 @@
     <groupId>com.fizzed</groupId>
     <artifactId>ninja-rocker</artifactId>
     <packaging>pom</packaging>
-    <version>0.9.1-SNAPSHOT</version>
+    <version>0.9.1</version>
 
     <properties>
         <java.version>1.7</java.version>
