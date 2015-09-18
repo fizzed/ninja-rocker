@@ -17,6 +17,12 @@
         <artifactId>fizzed-maven-parent</artifactId>
         <version>1.12</version>
     </parent>
+    
+    <scm>
+        <url>https://github.com/fizzed/ninja-rocker</url>
+        <connection>scm:git:git@github.com:fizzed/ninja-rocker.git</connection>
+        <tag>HEAD</tag>
+    </scm>
 
     <modules>
         <module>module</module>
