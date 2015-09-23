@@ -181,6 +181,12 @@
             <artifactId>ninja-rocker-module</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.fizzed</groupId>
+            <artifactId>rocker-compiler</artifactId>
+            <version>${rocker.version}</version>
+            <scope>provided</scope>
+        </dependency>
         
         <!-- fancy stuff for demo -->
         <dependency>

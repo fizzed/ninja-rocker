@@ -66,6 +66,7 @@
             <groupId>com.fizzed</groupId>
             <artifactId>rocker-runtime</artifactId>
             <version>${rocker.version}</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>
