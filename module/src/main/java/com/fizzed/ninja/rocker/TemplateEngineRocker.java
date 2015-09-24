@@ -20,9 +20,11 @@ import com.fizzed.ninja.rocker.views.common_error;
 import com.fizzed.rocker.RenderingException;
 import com.fizzed.rocker.RockerModelCallback;
 import com.fizzed.rocker.RockerOutput;
-import com.fizzed.rocker.RockerRuntime;
+import com.fizzed.rocker.runtime.RockerRuntime;
 import com.fizzed.rocker.RockerTemplate;
 import com.fizzed.rocker.runtime.ArrayOfByteArraysOutput;
+import com.fizzed.rocker.runtime.CompileDiagnostic;
+import com.fizzed.rocker.runtime.CompileDiagnosticException;
 import com.fizzed.rocker.runtime.DefaultRockerModel;
 import java.util.Map;
 
@@ -52,6 +54,7 @@ import org.slf4j.LoggerFactory;
 public class TemplateEngineRocker implements TemplateEngine {
     static private final Logger log = LoggerFactory.getLogger(TemplateEngineRocker.class);
     
+    private final String CONF_RELOAD_KEY = "rocker.reload";
     private final String FILE_SUFFIX = ".rocker.html";
     private final String CONTENT_TYPE = "text/html";
 
@@ -77,8 +80,12 @@ public class TemplateEngineRocker implements TemplateEngine {
         this.commonErrorTemplates.put(NinjaConstant.LOCATION_VIEW_FTL_HTML_UNAUTHORIZED, common_error.class);
  
         if (ninjaProperties.isDev()) {
-            // try to set reloading to true in dev mode
-            RockerRuntime.getInstance().setReloading(true);
+            Boolean reload = ninjaProperties.getBooleanWithDefault(CONF_RELOAD_KEY, true);
+            
+            if (reload) {
+                // try to set reloading to true in dev mode
+                RockerRuntime.getInstance().setReloading(reload);
+            }
         }
         
         loadCustomErrorTemplates();
@@ -208,6 +215,8 @@ public class TemplateEngineRocker implements TemplateEngine {
         
         try {
             out = model.render();
+        } catch (CompileDiagnosticException e) {
+            throwRenderingException(context, result, e);
         } catch (RenderingException e) {
             throwRenderingException(context, result, e);
         }
@@ -243,20 +252,34 @@ public class TemplateEngineRocker implements TemplateEngine {
     public void throwRenderingException(
             Context context,
             Result result,
-            RenderingException cause) {
+            CompileDiagnosticException cause) {
         
-        // likely project source code
-        String sourcePath = cause.getTemplatePath();
+        // likely project source code??
+        CompileDiagnostic cd = cause.getDiagnostics().get(0);
         
-        /**
-        throw new ninja.exceptions.RenderingException(
+        // analyze the underlying cause(s)
+        // with auto reloading the exceptions can be numerous
+        
+        throw TemplateEngineRocker.renderingOrRuntimeException(
                 cause.getMessage(),
                 cause,
                 result,
-                "Rocker rendering exception",
-                sourcePath,
-                cause.getSourceLine());
-        */
+                "Rocker compile exception",
+                cd.getJavaFile().getAbsolutePath(),
+                (int)cd.getLineNumber()
+        );
+    }
+    
+    public void throwRenderingException(
+            Context context,
+            Result result,
+            RenderingException cause) {
+        
+        // likely project source code
+        String sourcePath = cause.getTemplatePath() + "/" + cause.getTemplateName();
+        
+        // analyze the underlying cause(s)
+        // with auto reloading the exceptions can be numerous
         
         throw TemplateEngineRocker.renderingOrRuntimeException(
                 cause.getMessage(),
@@ -268,20 +291,12 @@ public class TemplateEngineRocker implements TemplateEngine {
         );
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
     static public RuntimeException renderingOrRuntimeException(String message, Exception cause) throws RuntimeException {
         
         return renderingOrRuntimeException(message, cause, null, null, null, -1);
         
     }
-    
+
     static public RuntimeException renderingOrRuntimeException(String message,
                                                         Exception cause,
                                                         Result result,
@@ -299,7 +314,7 @@ public class TemplateEngineRocker implements TemplateEngine {
             return (RuntimeException)constructor.newInstance(message,
                                                                 cause,
                                                                 result,
-                                                                "Rocker rendering exception",
+                                                                title,
                                                                 sourcePath,
                                                                 lineOfError);
         }

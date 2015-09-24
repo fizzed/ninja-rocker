@@ -55,6 +55,7 @@
     </build>
 
     <dependencies>
+        
         <!-- compile scope -->
         <dependency>
             <groupId>org.ninjaframework</groupId>
@@ -66,7 +67,7 @@
             <groupId>com.fizzed</groupId>
             <artifactId>rocker-runtime</artifactId>
             <version>${rocker.version}</version>
-            <scope>compile</scope>
         </dependency>
+        
     </dependencies>
 </project>

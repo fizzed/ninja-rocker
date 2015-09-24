@@ -98,6 +98,7 @@
                             <useDefaultExcludes>true</useDefaultExcludes>
                             <excludes>
                                 <exclude>(.*)rocker.html$</exclude>
+                                <exclude>(.*)views/(.*).class$</exclude>
                             </excludes>
                         </configuration>
                         <executions>
