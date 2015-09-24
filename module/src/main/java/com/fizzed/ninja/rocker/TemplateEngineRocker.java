@@ -17,15 +17,19 @@
 package com.fizzed.ninja.rocker;
 
 import com.fizzed.ninja.rocker.views.common_error;
+import com.fizzed.rocker.BindableRockerModel;
 import com.fizzed.rocker.RenderingException;
+import com.fizzed.rocker.Rocker;
 import com.fizzed.rocker.RockerModelCallback;
 import com.fizzed.rocker.RockerOutput;
 import com.fizzed.rocker.runtime.RockerRuntime;
 import com.fizzed.rocker.RockerTemplate;
+import com.fizzed.rocker.TemplateNotFoundException;
 import com.fizzed.rocker.runtime.ArrayOfByteArraysOutput;
 import com.fizzed.rocker.runtime.CompileDiagnostic;
 import com.fizzed.rocker.runtime.CompileDiagnosticException;
 import com.fizzed.rocker.runtime.DefaultRockerModel;
+import com.fizzed.rocker.runtime.ParserException;
 import java.util.Map;
 
 import javax.inject.Singleton;
@@ -37,17 +41,22 @@ import ninja.utils.NinjaProperties;
 import org.slf4j.Logger;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import ninja.Router;
 import ninja.exceptions.InternalServerErrorException;
+import ninja.i18n.Lang;
+import ninja.i18n.Messages;
 import ninja.template.TemplateEngine;
 import ninja.template.TemplateEngineHelper;
 import ninja.utils.Message;
 import ninja.utils.NinjaConstant;
 import ninja.utils.ResponseStreams;
+import org.ocpsoft.prettytime.PrettyTime;
 import org.slf4j.LoggerFactory;
 
 @Singleton
@@ -58,16 +67,30 @@ public class TemplateEngineRocker implements TemplateEngine {
     private final String FILE_SUFFIX = ".rocker.html";
     private final String CONTENT_TYPE = "text/html";
 
-    private final NinjaRockerContext ninjaRockerContext;
     private final String fileSuffix;
     private final String contentType;
     private final Map<String, Class<? extends DefaultRockerModel>> commonErrorTemplates;
     
+    private final Router router;
+    private final Messages messages;
+    private final NinjaProperties ninjaProperties;
+    private final Provider<Lang> langProvider;
+    private final TemplateEngineHelper templateEngineHelper;
+    
+    
     @Inject
-    public TemplateEngineRocker(NinjaRockerContext ninjaRockerContext,
-                                TemplateEngineHelper templateEngineHelper,
-                                NinjaProperties ninjaProperties) throws Exception {
-        this.ninjaRockerContext = ninjaRockerContext;
+    public TemplateEngineRocker(Router router,
+                                Messages messages,
+                                NinjaProperties ninjaProperties,
+                                PrettyTime prettyTime,
+                                Provider<Lang> langProvider,
+                                TemplateEngineHelper templateEngineHelper) throws Exception {
+        this.router = router;
+        this.messages = messages;
+        this.ninjaProperties = ninjaProperties;
+        this.langProvider = langProvider;
+        this.templateEngineHelper = templateEngineHelper;
+        
         this.fileSuffix = FILE_SUFFIX;
         this.contentType = CONTENT_TYPE;
         
@@ -147,20 +170,36 @@ public class TemplateEngineRocker implements TemplateEngine {
         Message valueMessage = null;
         DefaultRockerModel model = null;
         
-        
-        // if the object is null we simply render an empty map...
-        if (object == null) {            
-            throw renderingOrRuntimeException("Renderable was null. You must pass an instance of a NinjaRockerTemplate the Result.render() method.", null);
+        if (object == null || object instanceof Map) {            
+            // assume this was a dynamic call
+            String templateName = result.getTemplate();
+            
+            if (templateName == null) {
+                templateName = this.templateEngineHelper.getTemplateForResult(context.getRoute(), result, fileSuffix);
+                // we expect leading / to be stripped for rocker to find it
+                if (templateName.startsWith("/")) {
+                    templateName = templateName.substring(1);
+                }
+            }
+            
+            BindableRockerModel bindableModel = Rocker.template(templateName);
+            
+            if (object != null) {
+                bindableModel.bind((Map)object);
+            }
+            
+            model = (DefaultRockerModel)bindableModel.getModel();
         }
         else if (object instanceof DefaultRockerModel) {
             model = (DefaultRockerModel)object;   
         }
-        else if (object instanceof RockerTemplate) {
-            throw renderingOrRuntimeException("Only templates with a parent class type of NinjaRockerTemplate are supported by this engine. " +
-                                        "Did you forget to configure your rocker maven build plugin to 'extendsClass' from com.fizzed.ninja.rocker.NinjaRockerTemplate?", null);
+        else if (object instanceof BindableRockerModel) {
+            // unwrap bindable model and get the real rocker model
+            BindableRockerModel bindableModel = (BindableRockerModel)object;
+            model = (DefaultRockerModel)bindableModel.getModel();
         }
         else if (object instanceof Message) {
-            // acceptable in case of system errors...
+            // system error???
             valueMessage = (Message)object;
         }
 
@@ -194,8 +233,8 @@ public class TemplateEngineRocker implements TemplateEngine {
             }
         }
         
-        // create the N variable
-        final NinjaRocker N = new NinjaRocker(ninjaRockerContext, context, result);
+        // create the 'N' variable
+        final NinjaRocker N = new NinjaRocker(ninjaProperties, router, messages, langProvider.get(), context, result);
         
         // register callback so we can inject what we need into template
         // prior to rendering, but after template was generated
@@ -217,6 +256,8 @@ public class TemplateEngineRocker implements TemplateEngine {
             out = model.render();
         } catch (CompileDiagnosticException e) {
             throwRenderingException(context, result, e);
+        } catch (ParserException e) {
+            throwRenderingException(context, result, e);
         } catch (RenderingException e) {
             throwRenderingException(context, result, e);
         }
@@ -234,11 +275,14 @@ public class TemplateEngineRocker implements TemplateEngine {
             }
         }
 
+        // TODO: charset?
         
         ArrayOfByteArraysOutput abao = (ArrayOfByteArraysOutput)out;
         
         // rendering was successful, finalize headers, and write it to output
         ResponseStreams responseStreams = context.finalizeHeaders(result);
+        
+        // TODO: we should hopefully be able to optimize the writing of bytes
         
         try (OutputStream os = responseStreams.getOutputStream()) {
             os.write(abao.toByteArray());
@@ -257,7 +301,6 @@ public class TemplateEngineRocker implements TemplateEngine {
         // likely project source code??
         CompileDiagnostic cd = cause.getDiagnostics().get(0);
         
-        // analyze the underlying cause(s)
         // with auto reloading the exceptions can be numerous
         
         // rocker may have figured out what part of the template caused the
@@ -286,13 +329,25 @@ public class TemplateEngineRocker implements TemplateEngine {
     public void throwRenderingException(
             Context context,
             Result result,
+            ParserException cause) {
+
+        throw TemplateEngineRocker.renderingOrRuntimeException(
+                    cause.getMessage(),
+                    cause,
+                    result,
+                    "Rocker template parsing exception",
+                    cause.getTemplatePath(),
+                    cause.getLineNumber()
+            );
+    }
+    
+    public void throwRenderingException(
+            Context context,
+            Result result,
             RenderingException cause) {
         
         // likely project source code
         String sourcePath = cause.getTemplatePath() + "/" + cause.getTemplateName();
-        
-        // analyze the underlying cause(s)
-        // with auto reloading the exceptions can be numerous
         
         throw TemplateEngineRocker.renderingOrRuntimeException(
                 cause.getMessage(),

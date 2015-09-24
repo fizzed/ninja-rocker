@@ -15,10 +15,33 @@
  */
 package controllers;
 
+import com.fizzed.ninja.rocker.NinjaRockerTemplate;
+import com.fizzed.rocker.RockerModel;
+import com.fizzed.rocker.RockerTemplate;
+
 /**
  *
  * @author joelauer
  */
-public class ApplicationTemplate {
+public abstract class ApplicationTemplate extends NinjaRockerTemplate {
+
+    public String requestMethod;
+    
+    public ApplicationTemplate(RockerModel model) {
+        super(model);
+    }
+    
+    @Override
+    protected void __associate(RockerTemplate context) {
+        super.__associate(context);
+        
+        if (context instanceof ApplicationTemplate) {
+            ApplicationTemplate applicationContext = (ApplicationTemplate)context;
+            this.requestMethod = applicationContext.requestMethod;
+        }
+        else {
+            throw new IllegalArgumentException("Unable to associate (context was not an instance of " + ApplicationTemplate.class.getCanonicalName() + ")");
+        }
+    }
     
 }

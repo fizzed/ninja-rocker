@@ -1,5 +1,6 @@
 @args (String s)
-@main.template("Runtime error") -> {
+
+@views.main.template("Runtime error") -> {
 
     @* s will be null triggering a runtime exception *@
     @s.toString()

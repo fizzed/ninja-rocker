@@ -9,7 +9,7 @@
         <java.version>1.7</java.version>
         <ninja.version>5.1.5</ninja.version>
         <rocker.version>0.10.0-SNAPSHOT</rocker.version>
-        <netbeans.compile.on.save>none</netbeans.compile.on.save>
+        <!--<netbeans.compile.on.save>none</netbeans.compile.on.save>-->
     </properties>
     
     <parent>

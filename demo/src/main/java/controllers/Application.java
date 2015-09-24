@@ -1,8 +1,11 @@
 package controllers;
 
+import com.fizzed.rocker.Rocker;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import ninja.Context;
 import ninja.FilterWith;
@@ -56,6 +59,27 @@ public class Application {
         }
         
         return result;
+    }
+    
+    public Result dynamic() {
+        
+        /**
+        // rocker way (bad templates immediately trigger exception)
+        return Results.ok().render(
+            Rocker.template("views/dynamic.rocker.html")
+                .bind("name", "Joe")
+                .bind("count", 1)
+        );
+        */
+        
+        // ninja way (with auto calculating of template names)
+        Map<String,Object> values = new HashMap<>();
+        values.put("name", "Joe");
+        values.put("count", 1);
+        
+        return Results.ok()
+            //.template("views/Application/dynamic.rocker.html")
+            .render(values);
     }
     
     public Result app_error() {

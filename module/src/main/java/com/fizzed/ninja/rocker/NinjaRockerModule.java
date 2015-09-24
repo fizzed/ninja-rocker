@@ -14,7 +14,6 @@ public class NinjaRockerModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(NinjaRockerContext.class).to(NinjaRockerContextImpl.class);
         bind(TemplateEngine.class).to(TemplateEngineRocker.class);
     }
     

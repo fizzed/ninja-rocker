@@ -11,6 +11,7 @@ public class Routes implements ApplicationRoutes {
     public void init(Router router) {
         router.GET().route("/").with(Application.class, "index");
         router.GET().route("/ninja").with(Application.class, "ninja");
+        router.GET().route("/dynamic").with(Application.class, "dynamic");
         
         router.GET().route("/app_error").with(Application.class, "app_error");
         router.GET().route("/template_error").with(Application.class, "template_error");

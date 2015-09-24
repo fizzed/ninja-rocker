@@ -24,8 +24,11 @@ import java.util.Map;
 import ninja.AssetsController;
 import ninja.Context;
 import ninja.Result;
+import ninja.Router;
 import ninja.i18n.Lang;
+import ninja.i18n.Messages;
 import ninja.utils.NinjaConstant;
+import ninja.utils.NinjaProperties;
 import org.ocpsoft.prettytime.PrettyTime;
 
 /**
@@ -40,7 +43,9 @@ import org.ocpsoft.prettytime.PrettyTime;
 public class NinjaRocker {
     
     // hidden from templates
-    private final NinjaRockerContext ninjaRockerContext;
+    private final NinjaProperties ninjaProperties;
+    private final Router router;
+    private final Messages messages;
     private final Context context;
     private final Result result;
     private final Locale locale;
@@ -51,15 +56,16 @@ public class NinjaRocker {
     public Map<String,String> session;
     public String contextPath;
     
-    public NinjaRocker(NinjaRockerContext ninjaRockerContext, Context context, Result result) {
-        this.ninjaRockerContext = ninjaRockerContext;
+    public NinjaRocker(NinjaProperties ninjaProperties, Router router, Messages messages, Lang ninjaLang, Context context, Result result) {
+        this.ninjaProperties = ninjaProperties;
+        this.router = router;
+        this.messages = messages;
         
          // context & result required for correct i18n method
         this.context = context;
         this.result = result;
         
         // set language from framework
-        Lang ninjaLang = ninjaRockerContext.getLangProvider().get();
         Optional<String> language = ninjaLang.getLanguage(context, Optional.of(result));
         if (language.isPresent()) {
             lang = language.get();
@@ -88,26 +94,26 @@ public class NinjaRocker {
     }
     
     public String reverseRoute(String typeName, String methodName) {
-        return ninjaRockerContext.getRouter().getReverseRoute(
+        return router.getReverseRoute(
             typeNameToClass(typeName),
             methodName);
     }
     
     public String reverseRoute(String typeName, String methodName, Object... params) {
-        return ninjaRockerContext.getRouter().getReverseRoute(
+        return router.getReverseRoute(
             typeNameToClass(typeName),
             methodName,
             params);
     }
     
     public String reverseRoute(Class<?> type, String methodName) {
-        return ninjaRockerContext.getRouter().getReverseRoute(
+        return router.getReverseRoute(
             type,
             methodName);
     }
     
     public String reverseRoute(Class<?> type, String methodName, Object... params) {
-        return ninjaRockerContext.getRouter().getReverseRoute(
+        return router.getReverseRoute(
             type,
             methodName,
             params);
@@ -122,7 +128,7 @@ public class NinjaRocker {
     }
     
     public String i18n(String messageKey) throws RenderingException {
-        String messageValue = ninjaRockerContext.getMessages()
+        String messageValue = messages
                 .get(messageKey, context, Optional.of(result))
                 .or(messageKey);
         
@@ -130,7 +136,7 @@ public class NinjaRocker {
     }
     
     public String i18n(String messageKey, Object... params) throws RenderingException {
-        String messageValue = ninjaRockerContext.getMessages()
+        String messageValue = messages
                 .get(messageKey, context, Optional.of(result), params)
                 .or(messageKey);
 
@@ -160,15 +166,15 @@ public class NinjaRocker {
     // other custom stuff useful
     
     public boolean isProd() {
-        return this.ninjaRockerContext.getNinjaProperties().isProd();
+        return ninjaProperties.isProd();
     }
     
     public boolean isTest() {
-        return this.ninjaRockerContext.getNinjaProperties().isTest();
+        return ninjaProperties.isTest();
     }
     
     public boolean isDev() {
-        return this.ninjaRockerContext.getNinjaProperties().isDev();
+        return ninjaProperties.isDev();
     }
     
 }
