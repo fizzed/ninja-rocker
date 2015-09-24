@@ -16,6 +16,7 @@
 package com.fizzed.ninja.rocker;
 
 import com.fizzed.rocker.RenderingException;
+import com.fizzed.rocker.runtime.Raw;
 import com.google.common.base.Optional;
 import java.util.Date;
 import java.util.Locale;
@@ -24,6 +25,7 @@ import ninja.AssetsController;
 import ninja.Context;
 import ninja.Result;
 import ninja.i18n.Lang;
+import ninja.utils.NinjaConstant;
 import org.ocpsoft.prettytime.PrettyTime;
 
 /**
@@ -141,7 +143,20 @@ public class NinjaRocker {
         }
         return prettyTime.format(d);
     }
+
+    public String authenticityToken() {
+        return context.getSession().getAuthenticityToken();
+    }
     
+    public Raw authenticityForm() {
+        String s = new StringBuilder()
+                .append("<input type=\"hidden\" value=\"")
+                .append(context.getSession().getAuthenticityToken())
+                .append("\" name=\"" + NinjaConstant.AUTHENTICITY_TOKEN +  "\" />")
+                .toString();
+        return Raw.of(s);
+    }
+        
     // other custom stuff useful
     
     public boolean isProd() {
