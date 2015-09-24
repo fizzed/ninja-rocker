@@ -24,6 +24,7 @@
                     <skip>true</skip>
                 </configuration>
             </plugin>
+            <!-- STEP #1: add rocker maven plugin -->
             <plugin>
                 <groupId>com.fizzed</groupId>
                 <artifactId>rocker-maven-plugin</artifactId>
@@ -67,6 +68,7 @@
                 <includes>
                     <include>**/*</include>
                 </includes>
+                <!-- STEP #2: exclude rocker templates as resources -->
                 <excludes>
                     <exclude>**/*.java</exclude>
                     <exclude>**/*.rocker.html</exclude>
@@ -97,6 +99,7 @@
                         <configuration>
                             <useDefaultExcludes>true</useDefaultExcludes>
                             <excludes>
+                                <!-- STEP #3: exclude rocker templates and classes from triggering ninja restart -->
                                 <exclude>(.*)rocker.html$</exclude>
                                 <exclude>(.*)views/(.*).class$</exclude>
                             </excludes>
@@ -177,6 +180,8 @@
             <artifactId>ninja-standalone</artifactId>
             <version>${ninja.version}</version>
         </dependency>
+        
+        <!-- STEP #4: include module as dependency; include compiler as PROVIDED -->
         <dependency>
             <groupId>com.fizzed</groupId>
             <artifactId>ninja-rocker-module</artifactId>

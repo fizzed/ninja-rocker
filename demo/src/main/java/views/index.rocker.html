@@ -1,6 +1,7 @@
 @import controllers.Application
 
 @main.template("Home") -> {
+
 <div>
     <h3>Rocker Templates + NinjaFramework</h3>
     
@@ -10,10 +11,16 @@
         <li>Ninja v@Application.readNinjaVersion()</li>
     </ul>
     
-    <h4 style="margin-top:20px;">Features!</h4>
+    <h4 style="margin-top:20px;">Features</h4>
     <ul>
         <li><a href='@N.reverseRoute(Application.class, "ninja")'>Ninja-specific features</a></li>
         <li><a href='@N.reverseRoute(Application.class, "ninja")?lang=de'>Ninja-specific features (with German set as lang)</a></li>
+    </ul>
+    
+    <h4 style="margin-top:20px;">Hot reloading</h4>
+    <ul>
+        <li>Rocker reload currently enabled? @com.fizzed.rocker.runtime.RockerRuntime.getInstance().isReloading()</li>
+        <li>Rocker template bootstrap? @com.fizzed.rocker.runtime.RockerRuntime.getInstance().getBootstrap().getClass().getCanonicalName()</li>
     </ul>
     
     <h4 style="margin-top:20px;">Error pages (these can all be customized)</h4>

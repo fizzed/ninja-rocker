@@ -1,48 +1,40 @@
 
 package com.fizzed.ninja.rocker;
 
-import com.fizzed.rocker.RenderingException;
-import com.fizzed.rocker.RockerOutput;
-import com.fizzed.rocker.runtime.ArrayOfByteArraysOutput;
-import com.fizzed.rocker.runtime.DefaultRockerModel;
+import com.fizzed.rocker.RockerModel;
+import com.fizzed.rocker.RockerTemplate;
 import com.fizzed.rocker.runtime.DefaultRockerTemplate;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import ninja.Context;
-import ninja.Result;
-import ninja.exceptions.InternalServerErrorException;
-import ninja.utils.ResponseStreams;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
- * New base class for all Rocker templates targeted for the Ninja Framework.
- * Permits templates to be directly used as a <code>Renderable</code> in a
- * Result. Also adds all <i>implicit</i> variables that Ninja's default
- * FreeMarker template system includes.
+ * Base class for all Rocker templates targeted for the Ninja Framework.
+ * Exposes the 'N' variable to all templates for Ninja.
  * 
  * @author joelauer
- * @param <T>
  */
-public abstract class NinjaRockerTemplate<T extends NinjaRockerTemplate> extends DefaultRockerTemplate<T> {
-    static private final Logger log = LoggerFactory.getLogger(NinjaRockerTemplate.class);
-    
+public abstract class NinjaRockerTemplate extends DefaultRockerTemplate {
+
     public NinjaRocker N;
     
-    public NinjaRockerTemplate(DefaultRockerModel model) {
+    public NinjaRockerTemplate(RockerModel model) {
         super(model);
     }
     
+    /**
+     * Associates this template for processing within the context of another
+     * template.  This happens when TemplateA calls or includes TemplateB.  
+     * TemplateB needs to share variables from TemplateA.
+     * @param context The template calling this template during a render
+     */
     @Override
-    protected void __associate(DefaultRockerTemplate context) throws RenderingException {
+    protected void __associate(RockerTemplate context) {
         super.__associate(context);
+        
         if (context instanceof NinjaRockerTemplate) {
-            NinjaRockerTemplate ninjaTemplate = (NinjaRockerTemplate)context;
-            this.N = ninjaTemplate.N;
+            NinjaRockerTemplate ninjaContext = (NinjaRockerTemplate)context;
+            this.N = ninjaContext.N;
         }
         else {
-            throw new RenderingException("Template was not type " + NinjaRockerTemplate.class.getCanonicalName());
+            throw new IllegalArgumentException("Unable to associate (context was not an instance of " + NinjaRockerTemplate.class.getCanonicalName() + ")");
         }
     }
 }

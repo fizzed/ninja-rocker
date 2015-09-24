@@ -260,14 +260,27 @@ public class TemplateEngineRocker implements TemplateEngine {
         // analyze the underlying cause(s)
         // with auto reloading the exceptions can be numerous
         
-        throw TemplateEngineRocker.renderingOrRuntimeException(
-                cause.getMessage(),
-                cause,
-                result,
-                "Rocker compile exception",
-                cd.getJavaFile().getAbsolutePath(),
-                (int)cd.getLineNumber()
-        );
+        // rocker may have figured out what part of the template caused the
+        // compilation problem so we'll throw a better exception
+        if (cd.getTemplateLineNumber() >= 0) {
+            throw TemplateEngineRocker.renderingOrRuntimeException(
+                    cause.getMessage(),
+                    cause,
+                    result,
+                    "Rocker compile exception",
+                    cd.getTemplateFile().getAbsolutePath(),
+                    (int)cd.getTemplateLineNumber()
+            );
+        } else {
+            throw TemplateEngineRocker.renderingOrRuntimeException(
+                    cause.getMessage(),
+                    cause,
+                    result,
+                    "Rocker compile exception",
+                    cd.getJavaFile().getAbsolutePath(),
+                    (int)cd.getJavaLineNumber()
+            );
+        }
     }
     
     public void throwRenderingException(
