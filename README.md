@@ -56,6 +56,16 @@ public class Application {
 }
 ```
 
+## Two-minute drill
+
+There is a Ninja app in the `demo` folder that demonstrates all the functionality
+this module provides and it's a simple way to see how it works.  Run the following
+in your shell (from the root project directory, not in `demo`):
+
+    mvn -Pninja-run test
+
+Once running, point your browser to http://localhost:8080/
+
 ## Setup
 
 ### Add dependency
@@ -198,16 +208,6 @@ package is a rocker template, you can exclude these classes:
 
 It's best to place your templates in the `views` folder of your application
 with a suffix of `.rocker.html`.
-
-## Demo
-
-There is a Ninja app in the `demo` folder that demonstrates all the functionality
-this module provides and it's a simple way to see how it works.  Run the following
-in your shell (from the root project directory, not in `demo`):
-
-    mvn -Pninja-run test
-
-Once running, point your browser to http://localhost:8080/
 
 ## Ninja variable
 
