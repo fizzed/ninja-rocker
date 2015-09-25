@@ -103,10 +103,14 @@ public class Module extends AbstractModule {
 
 ### Add maven plugin
 
+Rocker ties into Maven with a plugin to parse templates and generate the Java
+source during the <code>generate-sources</code> phase.  In order to access
+the `N` variable and access Ninja features in your templates, it's critical
+you configure the `extendsClass` variable as below.
+
 ```xml
 <build>
     <plugins>
-        <!-- other plugins ... -->
         <plugin>
             <groupId>com.fizzed</groupId>
             <artifactId>rocker-maven-plugin</artifactId>
@@ -159,6 +163,7 @@ can safely exclude Rocker templates from your final build.
     </resources>
 </build>
 ```
+
 ### Exclude rocker compiled templates from triggering Ninja SuperDevMode restart
 
 By default, Ninja's SuperDevMode watches all .class files in your <code>target/classes</code>
