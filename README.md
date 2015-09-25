@@ -60,17 +60,26 @@ public class Application {
 
 ### Add dependency
 
-Add the ninja-rocker-module dependency to your pom.xml:
+Add the ninja-rocker-module dependency to your Maven pom.xml
 
 ```xml
 <dependency>
     <groupId>com.fizzed</groupId>
     <artifactId>ninja-rocker-module</artifactId>
-    <version>0.9.1</version>
+    <version>0.10.0</version>
 </dependency>
+
+<!-- for hot-reloading support only during development -->
+<dependency>
+    <groupId>com.fizzed</groupId>
+    <artifactId>rocker-compiler</artifactId>
+    <version>0.10.0</version>
+    <scope>provided</scope>
+</dependency>
+
 ```
 
-### Install module
+### Add module to conf/Module.java
 
 Add the module to your conf/Module.java file. Once installed, Rocker will
 replace the default FreeMarker template engine for all content with the type
@@ -92,12 +101,93 @@ public class Module extends AbstractModule {
 }
 ```
 
-### Integrate Rocker with your build system
+### Add maven plugin
 
-Since Rocker relies on compiled templates, you'll need to integrate Rocker's
-parser & compiler into your build process.  Instructions are on the
-[Rocker project](https://github.com/fizzed/rocker) site.  You can also check
-out our demo application (more details below) to see it all together.
+```xml
+<build>
+    <plugins>
+        <!-- other plugins ... -->
+        <plugin>
+            <groupId>com.fizzed</groupId>
+            <artifactId>rocker-maven-plugin</artifactId>
+            <version>0.10.0</version>
+            <executions>
+                <execution>
+                    <id>generate-rocker-templates</id>
+                    <goals>
+                        <goal>generate</goal>
+                    </goals>
+                    <configuration>
+                        <extendsClass>com.fizzed.ninja.rocker.NinjaRockerTemplate</extendsClass>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
+```
+
+For more detailed information on Rocker and its maven plugin, please visit the
+[Rocker project](https://github.com/fizzed/rocker) site.
+
+### Exclude rocker templates as a resource
+
+Ninja recommends including everything except .java files from <code>src/main/java</code>
+by default.  Since Rocker's templates are compiled, this isn't necessary and you
+can safely exclude Rocker templates from your final build.
+
+```xml
+<build>
+    <resources>
+        <resource>
+            <directory>src/main/java</directory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+            <!-- add rocker template exclude below -->
+            <excludes>
+                <exclude>**/*.java</exclude>
+                <exclude>**/*.rocker.html</exclude>
+            </excludes>
+        </resource>
+        <resource>
+            <directory>src/main/resources</directory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </resource>
+    </resources>
+</build>
+```
+### Exclude rocker compiled templates from triggering Ninja SuperDevMode restart
+
+By default, Ninja's SuperDevMode watches all .class files in your <code>target/classes</code>
+directory.  Any modification to the contents of that directory will trigger the
+Ninja HTTP server to restart.  Rocker's templates are compiled and with hot
+reload enabled, Rocker will recompile and reload your templates without requiring
+a JVM restart.  Unfortunately, Ninja's defaults will still trigger a restart
+since Rocker will recompile and change the contents of <code>target/classes</code>.
+As long as you stick to the convention that any class in the <code>views</code>
+package is a rocker template, you can exclude these classes:
+
+```xml
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.ninjaframework</groupId>
+            <artifactId>ninja-maven-plugin</artifactId>
+            <version>5.1.5</version>
+            <configuration>
+                <useDefaultExcludes>true</useDefaultExcludes>
+                <excludes>
+                    <exclude>(.*)rocker.html$</exclude>
+                    <exclude>(.*)views/(.*).class$</exclude>
+                </excludes>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
+```
 
 ### Write templates
 
@@ -113,17 +203,6 @@ in your shell (from the root project directory, not in `demo`):
     mvn -Pninja-run test
 
 Once running, point your browser to http://localhost:8080/
-
-If you'd like to see how simple hot-reloading works as you modify either the 
-Java code or a Rocker template, open up a second shell and run the following
- (from the root project directory, not in `demo`):
-
-    mvn fizzed-watcher:run
-
-Any time you edit a file, the fizzed-watcher maven plugin will trigger a maven
-<code>compile</code>.  This will also trigger Rocker to regenerate Java sources
-for any changed templates.  Ninja will restart and your new changes will be
-available.
 
 ## Ninja variable
 
@@ -151,19 +230,8 @@ variable is defined in <code>com.fizzed.ninja.rocker.NinjaRockerTemplate</code>.
 
 The configuration section for your rocker plugin for maven should look like this:
 
-    <plugin>
-        <groupId>com.fizzed</groupId>
-        <artifactId>rocker-maven-plugin</artifactId>
-        <version>0.9.0</version>
-        <executions>
-            <execution>
-                <id>generate-rocker-templates</id>
-                <goals>
-                    <goal>generate</goal>
-                </goals>
-                <configuration>
-                    <extendsClass>com.fizzed.ninja.rocker.NinjaRockerTemplate</extendsClass>
-                </configuration>
-            </execution>
-        </executions>
-    </plugin>
+## License
+
+Copyright (C) 2015 Joe Lauer / Fizzed, Inc.
+
+This work is licensed under the Apache License, Version 2.0. See LICENSE for details.
