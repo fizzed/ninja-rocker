@@ -24,7 +24,6 @@ import com.fizzed.rocker.RockerModelCallback;
 import com.fizzed.rocker.RockerOutput;
 import com.fizzed.rocker.runtime.RockerRuntime;
 import com.fizzed.rocker.RockerTemplate;
-import com.fizzed.rocker.TemplateNotFoundException;
 import com.fizzed.rocker.runtime.ArrayOfByteArraysOutput;
 import com.fizzed.rocker.runtime.CompileDiagnostic;
 import com.fizzed.rocker.runtime.CompileDiagnosticException;
@@ -114,6 +113,7 @@ public class TemplateEngineRocker implements TemplateEngine {
         loadCustomErrorTemplates();
     }
     
+    // workaround until Ninja lets you override these constant template names
     public final void loadCustomErrorTemplates() {
         Class<DefaultRockerModel> internalServerErrorClass = getCustomErrorViewClass("views.system.internal_server_error");
         if (internalServerErrorClass != null) {

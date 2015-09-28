@@ -48,6 +48,10 @@ public class Application {
     public Result ninja(Context context, @Param("lang") String l) {
         context.getSession().put("user", "Joe");
         
+        // add a flash message
+        context.getFlashScope().put("success", "Success message via flash!");
+        context.getFlashScope().put("error", "Error message via flash!");
+        
         Result result = Results.ok().render(
             views.ninja.template()
         );

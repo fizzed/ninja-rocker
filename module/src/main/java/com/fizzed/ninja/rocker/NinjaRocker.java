@@ -18,6 +18,8 @@ package com.fizzed.ninja.rocker;
 import com.fizzed.rocker.RenderingException;
 import com.fizzed.rocker.runtime.Raw;
 import com.google.common.base.Optional;
+import com.google.common.collect.Maps;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
@@ -55,6 +57,7 @@ public class NinjaRocker {
     public String lang;
     public Map<String,String> session;
     public String contextPath;
+    public Map<String,String> flash;
     
     public NinjaRocker(NinjaProperties ninjaProperties, Router router, Messages messages, Lang ninjaLang, Context context, Result result) {
         this.ninjaProperties = ninjaProperties;
@@ -77,12 +80,34 @@ public class NinjaRocker {
         // put all entries of the session cookie to the map.
         // You can access the values by their key in the cookie
         // For eg: @session.get("key")
-        // should we just set to an empty map?
         if (!context.getSession().isEmpty()) {
             this.session = context.getSession().getData();
+        } else {
+            this.session = Collections.EMPTY_MAP;
         }
         
         this.contextPath = context.getContextPath();
+        
+        // flash code copied directly from ninja.template.TemplateEngineFreemarker
+        // maybe we can get Ninja project to move it into a helper class eventually...
+        // this is a convenience way of allowing flash messages to be translated
+        flash = Maps.newHashMap();
+        
+        for (Map.Entry<String, String> entry : context.getFlashScope().getCurrentFlashCookieData().entrySet()) {
+            
+            String messageValue = null;
+    
+            Optional<String> messageValueOptional = messages.get(entry.getValue(), context, Optional.of(result));
+                
+            if (!messageValueOptional.isPresent()) {
+                messageValue = entry.getValue();
+            } else {
+                messageValue = messageValueOptional.get();
+            }
+            
+            // new way
+            flash.put(entry.getKey(), messageValue);
+        }
     }
     
     private Class<?> typeNameToClass(String typeName) {
@@ -144,6 +169,7 @@ public class NinjaRocker {
     }
     
     public String prettyTime(Date d) {
+        // lazy load pretty time
         if (prettyTime == null) {
             prettyTime = new PrettyTime(locale);
         }

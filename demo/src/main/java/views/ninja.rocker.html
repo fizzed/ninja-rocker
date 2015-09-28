@@ -42,11 +42,16 @@
     <p>Authenticity token: @N.authenticityToken()</p>
     <p>Authenticity form: @N.authenticityForm().toString()</p>
     
+    <h4 style="margin-top: 20px;">Flash</h4>
+    
+    <p>Flash w/ example key 'success': @N.flash.get("success")</p>
+    <p>Flash w/ example key 'error': @N.flash.get("error")</p>
+    
     <h4 style="margin-top: 20px;">Sessions</h4>
     
     All active session data:
     <ul>
-    @if (N.session != null) {
+    @if (!N.session.isEmpty()) {
         @for ((k,v) : N.session) {
             <li>@k: @v</li>
         }
