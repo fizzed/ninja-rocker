@@ -7,8 +7,8 @@
 
     <properties>
         <java.version>1.7</java.version>
-        <ninja.version>5.1.5</ninja.version>
-        <rocker.version>0.10.0</rocker.version>
+        <ninja.version>5.1.7-SNAPSHOT</ninja.version>
+        <rocker.version>0.10.1-SNAPSHOT</rocker.version>
     </properties>
     
     <parent>

@@ -162,6 +162,18 @@ public class TemplateEngineRocker implements TemplateEngine {
 
     @Override
     public void invoke(Context context, Result result) {
+        try {
+            doInvoke(context, result);
+        } catch (CompileDiagnosticException e) {
+            throwRenderingException(context, result, e);
+        } catch (ParserException e) {
+            throwRenderingException(context, result, e);
+        } catch (RenderingException e) {
+            throwRenderingException(context, result, e);
+        }
+    }
+    
+    public void doInvoke(Context context, Result result) {
         //log.info("invoke() with templateName: " + result.getTemplate());
         
         Object object = result.getRenderable();
@@ -169,6 +181,7 @@ public class TemplateEngineRocker implements TemplateEngine {
         // various types of objects renderable may store
         Message valueMessage = null;
         DefaultRockerModel model = null;
+        
         
         if (object == null || object instanceof Map) {            
             // assume this was a dynamic call
@@ -180,6 +193,9 @@ public class TemplateEngineRocker implements TemplateEngine {
                 if (templateName.startsWith("/")) {
                     templateName = templateName.substring(1);
                 }
+                
+                // set back on result for possible debugging later
+                result.template(templateName);
             }
             
             BindableRockerModel bindableModel = Rocker.template(templateName);
@@ -250,19 +266,8 @@ public class TemplateEngineRocker implements TemplateEngine {
         
         // looks like jetty gives us a single shot to write out the bytes
         // to the underlying output stream
-        RockerOutput out = null;
-        
-        try {
-            out = model.render();
-        } catch (CompileDiagnosticException e) {
-            throwRenderingException(context, result, e);
-        } catch (ParserException e) {
-            throwRenderingException(context, result, e);
-        } catch (RenderingException e) {
-            throwRenderingException(context, result, e);
-        }
-        
-        
+        RockerOutput out = model.render();
+
         // set content type if not set
         if (result.getContentType() == null) {
             switch (out.getContentType()) {

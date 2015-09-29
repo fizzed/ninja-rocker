@@ -16,7 +16,9 @@ import ninja.SecureFilter;
 import ninja.exceptions.BadRequestException;
 import ninja.i18n.Lang;
 import ninja.params.Param;
+import ninja.params.PathParam;
 import ninja.utils.NinjaProperties;
+import ninja.validation.Validation;
 import org.slf4j.Logger;
 
 /**
@@ -65,7 +67,7 @@ public class Application {
         return result;
     }
     
-    public Result dynamic() {
+    public Result dynamic(Context context, @Param("test") int test, Validation validation) {
         
         /**
         // rocker way (bad templates immediately trigger exception)
@@ -82,7 +84,7 @@ public class Application {
         values.put("count", 1);
         
         return Results.ok()
-            //.template("views/Application/dynamic.rocker.html")
+            //.template("views/Application/dynamic2.rocker.html")
             .render(values);
     }
     

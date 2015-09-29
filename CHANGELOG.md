@@ -1,6 +1,11 @@
 Ninja Framework + Rocker Templates by Fizzed
 ============================================
 
+#### 0.10.1 - 2015-09-28
+
+ - Bump to Rocker v0.10.1
+ - Added support for flash variables via `N.flash.get("name")`
+
 #### 0.10.0 - 2015-09-24
 
  - Major refactor to support v0.10.0 of Rocker
