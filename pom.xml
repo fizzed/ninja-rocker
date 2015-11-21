@@ -3,7 +3,7 @@
     <groupId>com.fizzed</groupId>
     <artifactId>ninja-rocker</artifactId>
     <packaging>pom</packaging>
-    <version>0.11.0</version>
+    <version>0.11.1-SNAPSHOT</version>
 
     <properties>
         <java.version>1.7</java.version>
@@ -20,7 +20,7 @@
     <scm>
         <url>https://github.com/fizzed/ninja-rocker.git</url>
         <connection>scm:git:git@github.com:fizzed/ninja-rocker.git</connection>
-        <tag>v0.11.0</tag>
+        <tag>v0.9.1</tag>
     </scm>
 
     <modules>
