@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.fizzed</groupId>
         <artifactId>ninja-rocker</artifactId>
-        <version>0.10.1-SNAPSHOT</version>
+        <version>0.11.0</version>
     </parent>
 
     <properties>
