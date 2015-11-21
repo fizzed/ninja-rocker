@@ -1,8 +1,10 @@
 Ninja Framework + Rocker Templates by Fizzed
 ============================================
 
- - [Fizzed, Inc.](http://fizzed.com)
- - Joe Lauer (Twitter: [@jjlauer](http://twitter.com/jjlauer))
+[![Build Status](https://travis-ci.org/fizzed/ninja-rocker.svg?branch=master)](https://travis-ci.org/fizzed/ninja-rocker)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.fizzed/ninja-rocker/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.fizzed/ninja-rocker)
+
+[Fizzed, Inc.](http://fizzed.com) (Follow on Twitter: [@fizzed_inc](http://twitter.com/fizzed_inc))
 
 ## Overview
 
