@@ -54,10 +54,10 @@ public class NinjaRocker {
     private PrettyTime prettyTime;
     
     // will be visible to template during rendering process as a property
-    public String lang;
-    public Map<String,String> session;
-    public String contextPath;
-    public Map<String,String> flash;
+    public final String lang;
+    public final Map<String,String> session;
+    public final String contextPath;
+    public final Map<String,String> flash;
     
     public NinjaRocker(NinjaProperties ninjaProperties, Router router, Messages messages, Lang ninjaLang, Context context, Result result) {
         this.ninjaProperties = ninjaProperties;
@@ -72,6 +72,8 @@ public class NinjaRocker {
         Optional<String> language = ninjaLang.getLanguage(context, Optional.of(result));
         if (language.isPresent()) {
             lang = language.get();
+        } else {
+            lang = null;
         }
         
         Optional<String> requestLang = ninjaLang.getLanguage(context, Optional.of(result));

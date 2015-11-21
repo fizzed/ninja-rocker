@@ -16,7 +16,6 @@ import ninja.SecureFilter;
 import ninja.exceptions.BadRequestException;
 import ninja.i18n.Lang;
 import ninja.params.Param;
-import ninja.params.PathParam;
 import ninja.utils.NinjaProperties;
 import ninja.validation.Validation;
 import org.slf4j.Logger;
