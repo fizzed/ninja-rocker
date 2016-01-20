@@ -79,7 +79,7 @@ Add the ninja-rocker-module dependency to your Maven pom.xml
 <dependency>
     <groupId>com.fizzed</groupId>
     <artifactId>ninja-rocker-module</artifactId>
-    <version>0.11.0</version>
+    <version>0.11.1</version>
 </dependency>
 
 <!-- for hot-reloading support only during development -->
