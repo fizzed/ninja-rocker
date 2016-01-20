@@ -1,6 +1,11 @@
 Ninja Framework + Rocker Templates by Fizzed
 ============================================
 
+#### 0.11.1 - 2016-01-20
+
+ - Bump to Rocker v0.10.5
+ - Bump to Ninja v5.3.0
+
 #### 0.11.0 - 2015-11-20
 
  - Bump to Rocker v0.10.3

@@ -86,7 +86,7 @@ Add the ninja-rocker-module dependency to your Maven pom.xml
 <dependency>
     <groupId>com.fizzed</groupId>
     <artifactId>rocker-compiler</artifactId>
-    <version>0.11.0</version>
+    <version>0.10.5</version>
     <scope>provided</scope>
 </dependency>
 
@@ -127,7 +127,7 @@ you configure the `extendsClass` variable as below.
         <plugin>
             <groupId>com.fizzed</groupId>
             <artifactId>rocker-maven-plugin</artifactId>
-            <version>0.11.0</version>
+            <version>0.10.5</version>
             <executions>
                 <execution>
                     <id>generate-rocker-templates</id>
@@ -194,7 +194,7 @@ package is a rocker template, you can exclude these classes:
         <plugin>
             <groupId>org.ninjaframework</groupId>
             <artifactId>ninja-maven-plugin</artifactId>
-            <version>5.1.5</version>
+            <version>5.3.0</version>
             <configuration>
                 <useDefaultExcludes>true</useDefaultExcludes>
                 <excludes>
