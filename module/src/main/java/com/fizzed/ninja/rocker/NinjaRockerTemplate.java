@@ -4,6 +4,12 @@ package com.fizzed.ninja.rocker;
 import com.fizzed.rocker.RockerModel;
 import com.fizzed.rocker.RockerTemplate;
 import com.fizzed.rocker.runtime.DefaultRockerTemplate;
+import ninja.Context;
+import ninja.Result;
+import ninja.Router;
+import ninja.i18n.Lang;
+import ninja.i18n.Messages;
+import ninja.utils.NinjaProperties;
 
 /**
  * Base class for all Rocker templates targeted for the Ninja Framework.
@@ -37,4 +43,11 @@ public abstract class NinjaRockerTemplate extends DefaultRockerTemplate {
             throw new IllegalArgumentException("Unable to associate (context was not an instance of " + NinjaRockerTemplate.class.getCanonicalName() + ")");
         }
     }
+
+    /**
+     * Helpful if you extend this class to your template and need ninja context
+     */
+    public void injectContext(NinjaProperties ninjaProperties, Router router, Messages messages, Lang lang, Context context, Result result){
+
+    };
 }

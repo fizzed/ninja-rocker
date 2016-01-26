@@ -173,7 +173,7 @@ public class TemplateEngineRocker implements TemplateEngine {
         }
     }
     
-    public void doInvoke(Context context, Result result) {
+    public void doInvoke(final Context context, final Result result) {
         //log.info("invoke() with templateName: " + result.getTemplate());
         
         Object object = result.getRenderable();
@@ -260,6 +260,7 @@ public class TemplateEngineRocker implements TemplateEngine {
                 if (template instanceof NinjaRockerTemplate) {
                     NinjaRockerTemplate ninjaTemplate = (NinjaRockerTemplate)template;
                     ninjaTemplate.N = N;
+                    ninjaTemplate.injectContext(ninjaProperties, router, messages, langProvider.get(), context, result);
                 }
             }
         });
