@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import models.User;
 import ninja.Context;
 import ninja.FilterWith;
 import ninja.Ninja;
@@ -85,6 +86,16 @@ public class Application {
         return Results.ok()
             //.template("views/Application/dynamic2.rocker.html")
             .render(values);
+    }
+    
+    public Result application_template(Context context) {
+        // set something on the context and voila the application-specific
+        // template will make it available to any template via an `A` variable
+        context.setAttribute("USER", new User("Joe"));
+        
+        return Results.ok().render(
+            views.application_template.template()
+        );
     }
     
     public Result app_error() {

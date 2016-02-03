@@ -44,14 +44,14 @@ import org.ocpsoft.prettytime.PrettyTime;
  */
 public class NinjaRocker {
     
-    // hidden from templates
-    private final NinjaProperties ninjaProperties;
-    private final Router router;
-    private final Messages messages;
-    private final Context context;
-    private final Result result;
-    private final Locale locale;
-    private PrettyTime prettyTime;
+    // hidden from templates but not subclasses
+    protected final NinjaProperties ninjaProperties;
+    protected final Router router;
+    protected final Messages messages;
+    protected final Context context;
+    protected final Result result;
+    protected final Locale locale;
+    protected PrettyTime prettyTime;
     
     // will be visible to template during rendering process as a property
     public final String lang;
@@ -82,7 +82,7 @@ public class NinjaRocker {
         // put all entries of the session cookie to the map.
         // You can access the values by their key in the cookie
         // For eg: @session.get("key")
-        if (!context.getSession().isEmpty()) {
+        if (context.getSession() != null && !context.getSession().isEmpty()) {
             this.session = context.getSession().getData();
         } else {
             this.session = Collections.EMPTY_MAP;
@@ -95,20 +95,22 @@ public class NinjaRocker {
         // this is a convenience way of allowing flash messages to be translated
         flash = Maps.newHashMap();
         
-        for (Map.Entry<String, String> entry : context.getFlashScope().getCurrentFlashCookieData().entrySet()) {
-            
-            String messageValue = null;
-    
-            Optional<String> messageValueOptional = messages.get(entry.getValue(), context, Optional.of(result));
-                
-            if (!messageValueOptional.isPresent()) {
-                messageValue = entry.getValue();
-            } else {
-                messageValue = messageValueOptional.get();
+        if (context.getFlashScope() != null) {
+            for (Map.Entry<String, String> entry : context.getFlashScope().getCurrentFlashCookieData().entrySet()) {
+
+                String messageValue = null;
+
+                Optional<String> messageValueOptional = messages.get(entry.getValue(), context, Optional.of(result));
+
+                if (!messageValueOptional.isPresent()) {
+                    messageValue = entry.getValue();
+                } else {
+                    messageValue = messageValueOptional.get();
+                }
+
+                // new way
+                flash.put(entry.getKey(), messageValue);
             }
-            
-            // new way
-            flash.put(entry.getKey(), messageValue);
         }
     }
     

@@ -250,7 +250,7 @@ public class TemplateEngineRocker implements TemplateEngine {
         }
         
         // create the 'N' variable
-        final NinjaRocker N = new NinjaRocker(ninjaProperties, router, messages, langProvider.get(), context, result);
+        final DefaultNinjaRocker N = new DefaultNinjaRocker(ninjaProperties, router, messages, langProvider.get(), context, result);
         
         // register callback so we can inject what we need into template
         // prior to rendering, but after template was generated
@@ -259,7 +259,7 @@ public class TemplateEngineRocker implements TemplateEngine {
             public void onRender(RockerTemplate template) {
                 if (template instanceof NinjaRockerTemplate) {
                     NinjaRockerTemplate ninjaTemplate = (NinjaRockerTemplate)template;
-                    ninjaTemplate.N = N;
+                    ninjaTemplate.__apply(N);
                 }
             }
         });

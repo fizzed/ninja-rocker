@@ -1,0 +1,23 @@
+@option extendsClass=utils.ApplicationRockerTemplate
+@import java.util.Map
+
+@views.main.template("Application-specific template") -> {
+
+<div>
+    <h3>Application-specific template</h3>
+    
+    <br/>
+
+    <h4>User object via application-specific template</h4>
+    
+    <code>@@A.user.getName()</code>
+    
+    <p>User name: @A.user.getName()</p>
+    
+    <code>@@context.getRequestPath()</code>
+    
+    <p>Request path: @context.getRequestPath()</p>
+    
+</div>
+
+}

@@ -3,6 +3,7 @@ package com.fizzed.ninja.rocker;
 
 import com.fizzed.rocker.RockerModel;
 import com.fizzed.rocker.RockerTemplate;
+import com.fizzed.rocker.RockerUtils;
 import com.fizzed.rocker.runtime.DefaultRockerTemplate;
 
 /**
@@ -19,22 +20,21 @@ public abstract class NinjaRockerTemplate extends DefaultRockerTemplate {
         super(model);
     }
     
+    public void __apply(DefaultNinjaRocker N) {
+        this.N = N;
+    }
+    
     /**
      * Associates this template for processing within the context of another
      * template.  This happens when TemplateA calls or includes TemplateB.  
      * TemplateB needs to share variables from TemplateA.
-     * @param context The template calling this template during a render
+     * @param template The template calling this template during a render
      */
     @Override
-    protected void __associate(RockerTemplate context) {
-        super.__associate(context);
-        
-        if (context instanceof NinjaRockerTemplate) {
-            NinjaRockerTemplate ninjaContext = (NinjaRockerTemplate)context;
-            this.N = ninjaContext.N;
-        }
-        else {
-            throw new IllegalArgumentException("Unable to associate (context was not an instance of " + NinjaRockerTemplate.class.getCanonicalName() + ")");
-        }
+    protected void __associate(RockerTemplate template) {
+        super.__associate(template);
+        NinjaRockerTemplate ninjaTemplate
+            = RockerUtils.requireTemplateClass(template, NinjaRockerTemplate.class);
+        this.N = ninjaTemplate.N;
     }
 }
