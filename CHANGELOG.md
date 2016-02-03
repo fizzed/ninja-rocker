@@ -1,6 +1,14 @@
 Ninja Framework + Rocker Templates by Fizzed
 ============================================
 
+#### 0.12.0 - 2016-02-03
+
+ - Bump to Rocker v0.10.6
+ - Bump to Ninja v5.3.1
+ - Application-specific template support and examples
+ - Added support for accessing previously hidden variables in NinjaRocker by
+   allowing custom application templates.
+
 #### 0.11.1 - 2016-01-20
 
  - Bump to Rocker v0.10.5

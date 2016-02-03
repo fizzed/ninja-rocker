@@ -217,6 +217,110 @@ with a suffix of `.rocker.html`.
 Easiest way to discover all the properties and methods available in the `N`
 variable is to take a look at [NinjaRocker.java](https://github.com/fizzed/ninja-rocker/blob/master/module/src/main/java/com/fizzed/ninja/rocker/NinjaRocker.java).
 
+## Application-specific templates
+
+Looking for the ultimate integration of Ninja into your application?  Create your
+own application-specific template that subclasses `NinjaRockerTemplate` and
+expose any number of useful variables and/or methods to any of your templates.
+
+The demo has an example of how to do it [here](demo/src/main/java/utils/ApplicationRockerTemplate.java).
+
+### Write your own application-specific template
+
+Create a new class called `utils.ApplicationRockerTemplate`. This class will
+subclass `com.fizzed.ninja.rocker.NinjaRockerTemplate` and then it will need to
+override two methods to participate in the rendering process.
+
+```java
+package utils;
+
+import com.fizzed.ninja.rocker.DefaultNinjaRocker;
+import com.fizzed.ninja.rocker.NinjaRockerTemplate;
+import com.fizzed.rocker.RockerModel;
+import com.fizzed.rocker.RockerTemplate;
+import com.fizzed.rocker.RockerUtils;
+import models.User;
+import ninja.Context;
+
+abstract public class ApplicationRockerTemplate extends NinjaRockerTemplate {
+
+    public ApplicationRocker A;
+    public Context context;
+    
+    public ApplicationRockerTemplate(RockerModel model) {
+        super(model);
+    }
+    
+    /**
+     * Apply NinjaRocker to template immediately before rendering. Best place
+     * to setup your own application-specific properties or methods that will
+     * be available to any templates that extend your application-specific template.
+     * @param N The ninja rocker instance
+     */
+    @Override
+    public void __apply(DefaultNinjaRocker N) {
+        super.__apply(N);
+        // note: you could do error checking here and throw a runtime exception
+        this.A = new ApplicationRocker(N);
+        this.context = N.getContext();
+    }
+
+    /**
+     * Associate this template with another template during the rendering
+     * process.  Critical any variables you setup for a template to be copied
+     * between instances.
+     * @param template The template to associate us with
+     */
+    @Override
+    protected void __associate(RockerTemplate template) {
+        super.__associate(template);
+        ApplicationRockerTemplate applicationTemplate
+            = RockerUtils.requireTemplateClass(template, ApplicationRockerTemplate.class);
+        this.A = applicationTemplate.A;
+        this.context = applicationTemplate.context;
+    }
+    
+}
+```
+
+### Your templates need to extend your application-specific template
+
+There are two ways you can instruct a template to extend a specific superclass.
+First, you can do it in the maven plugin:
+
+```xml
+<build>
+    <plugins>
+        <plugin>
+            <groupId>com.fizzed</groupId>
+            <artifactId>rocker-maven-plugin</artifactId>
+            <version><!-- version here --></version>
+            <executions>
+                <execution>
+                    <id>generate-rocker-templates</id>
+                    <goals>
+                        <goal>generate</goal>
+                    </goals>
+                    <configuration>
+                        <extendsClass>utils.ApplicationRockerTemplate</extendsClass>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
+```
+
+Alternatively, your template can set an option for itself
+
+```html
+@option extendsClass=utils.ApplicationRockerTemplate
+
+@args (String title)
+
+<h1>@title</h1>
+```
+
 ## Common issues
 
 If your Ninja project compiles and runs, but you get a runtime error like this:
