@@ -20,10 +20,9 @@ import com.fizzed.ninja.rocker.views.common_error;
 import com.fizzed.rocker.BindableRockerModel;
 import com.fizzed.rocker.RenderingException;
 import com.fizzed.rocker.Rocker;
-import com.fizzed.rocker.RockerModelCallback;
-import com.fizzed.rocker.RockerOutput;
 import com.fizzed.rocker.runtime.RockerRuntime;
 import com.fizzed.rocker.RockerTemplate;
+import com.fizzed.rocker.RockerTemplateCustomizer;
 import com.fizzed.rocker.runtime.ArrayOfByteArraysOutput;
 import com.fizzed.rocker.runtime.CompileDiagnostic;
 import com.fizzed.rocker.runtime.CompileDiagnosticException;
@@ -55,7 +54,6 @@ import ninja.template.TemplateEngineHelper;
 import ninja.utils.Message;
 import ninja.utils.NinjaConstant;
 import ninja.utils.ResponseStreams;
-import org.ocpsoft.prettytime.PrettyTime;
 import org.slf4j.LoggerFactory;
 
 @Singleton
@@ -255,21 +253,21 @@ public class TemplateEngineRocker implements TemplateEngine {
             = this.ninjaRockerFactory.create(
                 ninjaProperties, router, messages, langProvider.get(), context, result);
         
-        // register callback so we can inject what we need into template
-        // prior to rendering, but after template was generated
-        model.__callback(new RockerModelCallback() {
-            @Override
-            public void onRender(RockerTemplate template) {
-                if (template instanceof NinjaRockerTemplate) {
-                    NinjaRockerTemplate ninjaTemplate = (NinjaRockerTemplate)template;
-                    ninjaTemplate.__apply(N);
+        // render the model using a specific output factory & template customizer
+        ArrayOfByteArraysOutput out
+            = (ArrayOfByteArraysOutput)model.render(
+                ArrayOfByteArraysOutput.FACTORY,
+                new RockerTemplateCustomizer() {
+                    @Override
+                    public void customize(RockerTemplate template) {
+                        // apply the N variable if its a ninja template
+                        if (template instanceof NinjaRockerTemplate) {
+                            NinjaRockerTemplate ninjaTemplate = (NinjaRockerTemplate)template;
+                            ninjaTemplate.__apply(N);
+                        }
+                    }
                 }
-            }
-        });
-        
-        // looks like jetty gives us a single shot to write out the bytes
-        // to the underlying output stream
-        RockerOutput out = model.render();
+            );
 
         // set content type if not set
         if (result.getContentType() == null) {
@@ -285,15 +283,13 @@ public class TemplateEngineRocker implements TemplateEngine {
 
         // TODO: charset of result?
         
-        ArrayOfByteArraysOutput abao = (ArrayOfByteArraysOutput)out;
-        
         // rendering was successful, finalize headers, and write it to output
         ResponseStreams responseStreams = context.finalizeHeaders(result);
         
         // TODO: we should hopefully be able to optimize the writing of bytes
         
         try (OutputStream os = responseStreams.getOutputStream()) {
-            os.write(abao.toByteArray());
+            os.write(out.toByteArray());
             os.flush();
             os.close();
         } catch (IOException e) {
