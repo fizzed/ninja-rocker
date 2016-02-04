@@ -10,7 +10,9 @@ Ninja Framework + Rocker Templates by Fizzed
  - Added support for accessing previously hidden variables in NinjaRocker by
    it being an actual instance of (DefaultNinjaRocker) where those properties
    have public methods.
- - Simpler and cleaner code for rendering templates in engine
+ - Simpler code for rendering templates in engine
+ - Improved future compat against Rocker changes for its default output
+   type for rendering templates   
 
 #### 0.11.1 - 2016-01-20
 
