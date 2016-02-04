@@ -7,7 +7,30 @@
     <h3>Application-specific template</h3>
     
     <br/>
-
+    
+    Rocker templates are subclasses of a parent template that adds/modifies
+    behavior.  When you access a variable or method in your template, its not
+    magic where its coming from -- that variable or method MUST exist in the
+    hierarchy of classes your template derives from.  By controlling what parent
+    your templates extends, you can add other variables or methods that can be
+    elegantly accessed in your template.  The template your viewing has a class
+    hierarchy of:
+    
+    <br/>
+    
+    <code>
+    com.fizzed.rocker.runtime.DefaultRockerTemplate
+     -> com.fizzed.ninja.rocker.NinjaRockerTemplate
+         -> utils.ApplicationRockerTemplate
+             ->  views.application_template</code>
+    
+    <br/><br/>
+    
+    In the following snippets below, the utils.ApplicationRockerTemplate class
+    is what adds the A variable to expose a couple extra properties.
+    
+    <br/><br/>
+    
     <h4>User object via application-specific template</h4>
     
     <code>@@A.user.getName()</code>

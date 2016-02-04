@@ -31,8 +31,8 @@ abstract public class ApplicationRockerTemplate extends NinjaRockerTemplate {
     
     /**
      * Apply NinjaRocker to template immediately before rendering. Best place
-     * to setup your own application-specific properties or methods that will
-     * be available to any templates that extend your application-specific template.
+     * to setup your own application-specific properties or methods that rely
+     * on Ninja context, router, messages, etc.
      * @param N The ninja rocker instance
      */
     @Override
@@ -43,8 +43,9 @@ abstract public class ApplicationRockerTemplate extends NinjaRockerTemplate {
 
     /**
      * Associate this template with another template during the rendering
-     * process.  Critical any variables you setup for a template to be copied
-     * between instances.
+     * process.  This occurs when Template A calls or includes Template B.
+     * Usually, you simply want to copy over the variables you created in
+     * the __apply method.
      * @param template The template to associate us with
      */
     @Override

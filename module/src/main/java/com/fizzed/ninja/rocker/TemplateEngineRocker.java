@@ -255,7 +255,7 @@ public class TemplateEngineRocker implements TemplateEngine {
         
         // render the model using a specific output factory & template customizer
         ArrayOfByteArraysOutput out
-            = (ArrayOfByteArraysOutput)model.render(
+            = model.render(
                 ArrayOfByteArraysOutput.FACTORY,
                 new RockerTemplateCustomizer() {
                     @Override

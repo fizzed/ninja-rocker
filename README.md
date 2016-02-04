@@ -239,8 +239,6 @@ import com.fizzed.ninja.rocker.NinjaRockerTemplate;
 import com.fizzed.rocker.RockerModel;
 import com.fizzed.rocker.RockerTemplate;
 import com.fizzed.rocker.RockerUtils;
-import models.User;
-import ninja.Context;
 
 abstract public class ApplicationRockerTemplate extends NinjaRockerTemplate {
 
@@ -249,13 +247,26 @@ abstract public class ApplicationRockerTemplate extends NinjaRockerTemplate {
     public ApplicationRockerTemplate(RockerModel model) {
         super(model);
     }
-
+    
+    /**
+     * Apply NinjaRocker to template immediately before rendering. Best place
+     * to setup your own application-specific properties or methods that rely
+     * on Ninja context, router, messages, etc.
+     * @param N The ninja rocker instance
+     */
     @Override
     public void __apply(DefaultNinjaRocker N) {
         super.__apply(N);
         this.A = new ApplicationRocker(N);
     }
 
+    /**
+     * Associate this template with another template during the rendering
+     * process.  This occurs when Template A calls or includes Template B.
+     * Usually, you simply want to copy over the variables you created in
+     * the __apply method.
+     * @param template The template to associate us with
+     */
     @Override
     protected void __associate(RockerTemplate template) {
         super.__associate(template);
@@ -266,6 +277,9 @@ abstract public class ApplicationRockerTemplate extends NinjaRockerTemplate {
     
 }
 ```
+
+(demo/src/main/java/utils/ApplicationRockerTemplate.java)
+(demo/src/main/java/utils/ApplicationRocker.java)
 
 ### Your templates need to extend your application-specific template
 
