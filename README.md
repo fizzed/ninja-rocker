@@ -281,6 +281,18 @@ abstract public class ApplicationRockerTemplate extends NinjaRockerTemplate {
 (demo/src/main/java/utils/ApplicationRockerTemplate.java)
 (demo/src/main/java/utils/ApplicationRocker.java)
 
+### Use your own `A` variable
+
+In this example, we are exposing the `ApplicationRocker` class as a variable
+named `A`.  In your template, you can then access it like so
+
+```html
+<h1>@A.user.getName()</h1>
+```
+
+The possibilities are obviously endless -- and remember that the Java compiler
+will check for type safety on everything.
+
 ### Your templates need to extend your application-specific template
 
 There are two ways you can instruct a template to extend a specific superclass.
