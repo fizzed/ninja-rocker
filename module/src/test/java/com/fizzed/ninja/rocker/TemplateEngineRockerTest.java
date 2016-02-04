@@ -54,7 +54,6 @@ public class TemplateEngineRockerTest {
     private Messages messages;
     @Mock
     private NinjaProperties ninjaProperties;
-    private PrettyTime prettyTime;
     @Mock
     private Provider<Lang> langProvider;
     @Mock
@@ -66,22 +65,22 @@ public class TemplateEngineRockerTest {
     @Mock
     private Result result;
     private TemplateEngineRocker templateEngine;
-    //private Writer writer;
     private ByteArrayOutputStream output;
     
     @Before
     public void before() throws Exception {
         MockitoAnnotations.initMocks(this);
-        this.prettyTime = new PrettyTime();
         
         when(context.getContextPath()).thenReturn("");
         when(lang.getLanguage(context, Optional.of(result))).thenReturn(Optional.of("en"));
         when(langProvider.get()).thenReturn(lang);
         
-        this.templateEngine = new TemplateEngineRocker(router, messages, ninjaProperties, prettyTime, langProvider, templateEngineHelper);
+        final NinjaRockerFactory ninjaRockerFactory = new NinjaRockerFactoryImpl();
         
-        //when(templateEngineHelper.getTemplateForResult(context.getRoute(), result, ".rocker.html")).thenReturn("com/fizzed/ninja/rocker/views/common_error.rocker.html");
-        
+        this.templateEngine = new TemplateEngineRocker(router, messages, ninjaProperties,
+                                                        langProvider, templateEngineHelper,
+                                                        ninjaRockerFactory);
+
         output = new ByteArrayOutputStream();
         ResponseStreams responseStreams = mock(ResponseStreams.class);
         when(context.finalizeHeaders(any(Result.class))).thenReturn(responseStreams);

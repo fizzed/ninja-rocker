@@ -20,13 +20,10 @@ import com.fizzed.ninja.rocker.NinjaRockerTemplate;
 import com.fizzed.rocker.RockerModel;
 import com.fizzed.rocker.RockerTemplate;
 import com.fizzed.rocker.RockerUtils;
-import models.User;
-import ninja.Context;
 
 abstract public class ApplicationRockerTemplate extends NinjaRockerTemplate {
 
     public ApplicationRocker A;
-    public Context context;
     
     public ApplicationRockerTemplate(RockerModel model) {
         super(model);
@@ -41,9 +38,7 @@ abstract public class ApplicationRockerTemplate extends NinjaRockerTemplate {
     @Override
     public void __apply(DefaultNinjaRocker N) {
         super.__apply(N);
-        // note: you could do error checking here and throw a runtime exception
         this.A = new ApplicationRocker(N);
-        this.context = N.getContext();
     }
 
     /**
@@ -58,7 +53,6 @@ abstract public class ApplicationRockerTemplate extends NinjaRockerTemplate {
         ApplicationRockerTemplate applicationTemplate
             = RockerUtils.requireTemplateClass(template, ApplicationRockerTemplate.class);
         this.A = applicationTemplate.A;
-        this.context = applicationTemplate.context;
     }
     
 }

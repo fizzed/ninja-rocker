@@ -75,20 +75,21 @@ public class TemplateEngineRocker implements TemplateEngine {
     private final NinjaProperties ninjaProperties;
     private final Provider<Lang> langProvider;
     private final TemplateEngineHelper templateEngineHelper;
-    
+    private final NinjaRockerFactory ninjaRockerFactory;
     
     @Inject
     public TemplateEngineRocker(Router router,
                                 Messages messages,
                                 NinjaProperties ninjaProperties,
-                                PrettyTime prettyTime,
                                 Provider<Lang> langProvider,
-                                TemplateEngineHelper templateEngineHelper) throws Exception {
+                                TemplateEngineHelper templateEngineHelper,
+                                NinjaRockerFactory ninjaRockerFactory) throws Exception {
         this.router = router;
         this.messages = messages;
         this.ninjaProperties = ninjaProperties;
         this.langProvider = langProvider;
         this.templateEngineHelper = templateEngineHelper;
+        this.ninjaRockerFactory = ninjaRockerFactory;
         
         this.fileSuffix = FILE_SUFFIX;
         this.contentType = CONTENT_TYPE;
@@ -250,7 +251,9 @@ public class TemplateEngineRocker implements TemplateEngine {
         }
         
         // create the 'N' variable
-        final DefaultNinjaRocker N = new DefaultNinjaRocker(ninjaProperties, router, messages, langProvider.get(), context, result);
+        final DefaultNinjaRocker N
+            = this.ninjaRockerFactory.create(
+                ninjaProperties, router, messages, langProvider.get(), context, result);
         
         // register callback so we can inject what we need into template
         // prior to rendering, but after template was generated
@@ -280,7 +283,7 @@ public class TemplateEngineRocker implements TemplateEngine {
             }
         }
 
-        // TODO: charset?
+        // TODO: charset of result?
         
         ArrayOfByteArraysOutput abao = (ArrayOfByteArraysOutput)out;
         

@@ -17,13 +17,16 @@ package utils;
 
 import com.fizzed.ninja.rocker.DefaultNinjaRocker;
 import models.User;
+import ninja.utils.NinjaConstant;
 
 public class ApplicationRocker {
     
+    public final String applicationName;
     public final User user;
 
     public ApplicationRocker(DefaultNinjaRocker N) {
-        this.user = N.getContext().getAttribute("USER", User.class);
+        this.applicationName = N.getNinjaProperties().getOrDie(NinjaConstant.applicationName);
+        this.user = N.context.getAttribute("USER", User.class);
     }
     
 }

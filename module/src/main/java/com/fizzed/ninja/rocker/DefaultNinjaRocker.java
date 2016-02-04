@@ -16,10 +16,10 @@
 package com.fizzed.ninja.rocker;
 
 import java.util.Locale;
+import java.util.Map;
 import ninja.Context;
 import ninja.Result;
 import ninja.Router;
-import ninja.i18n.Lang;
 import ninja.i18n.Messages;
 import ninja.utils.NinjaProperties;
 
@@ -29,12 +29,12 @@ import ninja.utils.NinjaProperties;
  * @author joelauer
  */
 public class DefaultNinjaRocker extends NinjaRocker {
-    
-    public DefaultNinjaRocker(NinjaProperties ninjaProperties, Router router, Messages messages, Lang ninjaLang, Context context, Result result) {
-        super(ninjaProperties, router, messages, ninjaLang, context, result);
+
+    public DefaultNinjaRocker(NinjaProperties ninjaProperties, Router router, Messages messages, Result result, Locale locale, Context context, String contextPath, String lang, Map<String, String> session, Map<String, String> flash) {
+        super(ninjaProperties, router, messages, result, locale, context, contextPath, lang, session, flash);
     }
     
-    // expose access to hidden variables
+    // public access to variables hidden to templates by default
     
     public NinjaProperties getNinjaProperties() {
         return this.ninjaProperties;
@@ -48,12 +48,12 @@ public class DefaultNinjaRocker extends NinjaRocker {
         return this.messages;
     }
     
-    public Locale getLocale() {
-        return this.locale;
+    public Result getResult() {
+        return this.result;
     }
     
-    public Context getContext() {
-        return this.context;
+    public Locale getLocale() {
+        return this.locale;
     }
     
 }

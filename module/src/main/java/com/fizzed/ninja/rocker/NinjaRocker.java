@@ -18,8 +18,6 @@ package com.fizzed.ninja.rocker;
 import com.fizzed.rocker.RenderingException;
 import com.fizzed.rocker.runtime.Raw;
 import com.google.common.base.Optional;
-import com.google.common.collect.Maps;
-import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
@@ -27,7 +25,6 @@ import ninja.AssetsController;
 import ninja.Context;
 import ninja.Result;
 import ninja.Router;
-import ninja.i18n.Lang;
 import ninja.i18n.Messages;
 import ninja.utils.NinjaConstant;
 import ninja.utils.NinjaProperties;
@@ -42,76 +39,43 @@ import org.ocpsoft.prettytime.PrettyTime;
  * 
  * @author joelauer
  */
-public class NinjaRocker {
+abstract public class NinjaRocker {
     
-    // hidden from templates but not subclasses
+    // hidden to template during render (but accessible in DefaultNinjaRocker)
     protected final NinjaProperties ninjaProperties;
     protected final Router router;
     protected final Messages messages;
-    protected final Context context;
     protected final Result result;
     protected final Locale locale;
-    protected PrettyTime prettyTime;
+    protected PrettyTime prettyTime;                        // lazy loaded
     
-    // will be visible to template during rendering process as a property
+    // visible to template during render
+    public final Context context;
+    public final String contextPath;
     public final String lang;
     public final Map<String,String> session;
-    public final String contextPath;
     public final Map<String,String> flash;
     
-    public NinjaRocker(NinjaProperties ninjaProperties, Router router, Messages messages, Lang ninjaLang, Context context, Result result) {
+    public NinjaRocker(NinjaProperties ninjaProperties,
+                       Router router,
+                       Messages messages,
+                       Result result,
+                       Locale locale,
+                       Context context,
+                       String contextPath,
+                       String lang,
+                       Map<String,String> session,
+                       Map<String,String> flash) {
         this.ninjaProperties = ninjaProperties;
         this.router = router;
         this.messages = messages;
-        
-         // context & result required for correct i18n method
-        this.context = context;
         this.result = result;
-        
-        // set language from framework
-        Optional<String> language = ninjaLang.getLanguage(context, Optional.of(result));
-        if (language.isPresent()) {
-            lang = language.get();
-        } else {
-            lang = null;
-        }
-        
-        Optional<String> requestLang = ninjaLang.getLanguage(context, Optional.of(result));
-        this.locale = ninjaLang.getLocaleFromStringOrDefault(requestLang);
-     
-        // put all entries of the session cookie to the map.
-        // You can access the values by their key in the cookie
-        // For eg: @session.get("key")
-        if (context.getSession() != null && !context.getSession().isEmpty()) {
-            this.session = context.getSession().getData();
-        } else {
-            this.session = Collections.EMPTY_MAP;
-        }
-        
-        this.contextPath = context.getContextPath();
-        
-        // flash code copied directly from ninja.template.TemplateEngineFreemarker
-        // maybe we can get Ninja project to move it into a helper class eventually...
-        // this is a convenience way of allowing flash messages to be translated
-        flash = Maps.newHashMap();
-        
-        if (context.getFlashScope() != null) {
-            for (Map.Entry<String, String> entry : context.getFlashScope().getCurrentFlashCookieData().entrySet()) {
-
-                String messageValue = null;
-
-                Optional<String> messageValueOptional = messages.get(entry.getValue(), context, Optional.of(result));
-
-                if (!messageValueOptional.isPresent()) {
-                    messageValue = entry.getValue();
-                } else {
-                    messageValue = messageValueOptional.get();
-                }
-
-                // new way
-                flash.put(entry.getKey(), messageValue);
-            }
-        }
+        this.locale = locale;
+        this.context = context;
+        this.contextPath = contextPath;
+        this.lang = lang;
+        this.session = session;
+        this.flash = flash;
     }
     
     private Class<?> typeNameToClass(String typeName) {

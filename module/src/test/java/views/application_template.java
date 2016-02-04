@@ -31,7 +31,7 @@ public class application_template extends DefaultRockerModel {
                 this.__internal.setCharset("UTF-8");
                 this.__internal.setContentType(ContentType.HTML);
                 this.__internal.setTemplatePackageName("views");
-                this.__internal.setTemplateName("context_path");
+                this.__internal.setTemplateName("application_template");
             }
 
             @Override

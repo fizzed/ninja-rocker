@@ -47,7 +47,7 @@ abstract public class ApplicationRockerTemplate extends NinjaRockerTemplate {
     public void __apply(DefaultNinjaRocker N) {
         super.__apply(N);
         this.A = new ApplicationRocker(
-            N.getContext().getAttribute("USER", User.class)
+            N.context.getAttribute("USER", User.class)
         );
     }
 

@@ -25,7 +25,6 @@ import java.io.IOException;
 import ninja.Context;
 import ninja.Result;
 import ninja.i18n.Lang;
-import static org.hamcrest.CoreMatchers.any;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;
@@ -43,6 +42,8 @@ public class NinjaRockerTemplateTest {
         when(context.getContextPath()).thenReturn("/context");
         when(ninjaLang.getLanguage(context, Optional.of(result))).thenReturn(Optional.of("en"));
         
+        final NinjaRockerFactory ninjaRockerFactory = new NinjaRockerFactoryImpl();
+        
         // bare minimum model + ninja template
         DefaultRockerModel model = new DefaultRockerModel() {
             @Override
@@ -54,7 +55,7 @@ public class NinjaRockerTemplateTest {
                         this.__internal.setContentType(ContentType.HTML);
                         this.__internal.setTemplatePackageName("test");
                         this.__internal.setTemplateName("test");
-                        this.N = new NinjaRocker(null, null, null, ninjaLang, context, result);
+                        this.N = ninjaRockerFactory.create(null, null, null, ninjaLang, context, result);
                     }
                     
                     @Override
