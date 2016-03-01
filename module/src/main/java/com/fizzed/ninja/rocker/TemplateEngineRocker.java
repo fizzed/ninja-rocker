@@ -281,16 +281,14 @@ public class TemplateEngineRocker implements TemplateEngine {
             }
         }
 
-        // TODO: charset of result?
+        // we know the content length
+        result.addHeader("Content-Length", Integer.toString(out.getByteLength()));
         
         // rendering was successful, finalize headers, and write it to output
         ResponseStreams responseStreams = context.finalizeHeaders(result);
         
-        // TODO: we should hopefully be able to optimize the writing of bytes
-        
         try (OutputStream os = responseStreams.getOutputStream()) {
             os.write(out.toByteArray());
-            os.flush();
             os.close();
         } catch (IOException e) {
             throw new InternalServerErrorException(e);
