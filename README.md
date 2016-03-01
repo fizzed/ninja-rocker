@@ -58,7 +58,7 @@ public class Application {
 }
 ```
 
-## Getting started
+## Demo 
 
 There is a Ninja app in the `demo` folder that demonstrates all the functionality
 this module provides and it's a simple way to see how it works.  This project 
