@@ -58,7 +58,7 @@ public class Application {
 }
 ```
 
-## Two-minute drill
+## Getting started
 
 There is a Ninja app in the `demo` folder that demonstrates all the functionality
 this module provides and it's a simple way to see how it works.  This project 

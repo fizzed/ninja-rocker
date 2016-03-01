@@ -86,7 +86,7 @@
     <profiles>
         <!-- ninja will run during the "test" phase -->
         <profile>
-            <id>ninja-run</id>
+            <id>rocker-demo-run</id>
             <build>
                 <plugins>
                     <!-- Allows you to run Ninja via the SuperDevMode. -->
@@ -107,60 +107,6 @@
                         <executions>
                             <execution>
                                 <id>ninja-run</id>
-                                <phase>test</phase>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <!-- jetty will run during the "test" phase -->
-        <profile>
-            <id>jetty-run</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.eclipse.jetty</groupId>
-                        <artifactId>jetty-maven-plugin</artifactId>
-                        <version>9.2.3.v20140905</version>
-                        <configuration>
-                            <contextPath>/</contextPath>
-                            <stopKey>stop</stopKey>
-                            <stopPort>8889</stopPort>
-                            <scanIntervalSeconds>1</scanIntervalSeconds>
-                            <reload>automatic</reload>
-                            <webAppConfig>
-                                <contextPath>/</contextPath>
-                                <extraClasspath>target/classes</extraClasspath>
-                            </webAppConfig>
-                            <scanTargets>
-                                <scanTarget>../module/target/classes</scanTarget>
-                            </scanTargets>
-                            <scanTargetPatterns>
-                                <scanTargetPattern>
-                                    <directory>target/classes</directory>
-                                    <includes>
-                                        <include>**/*</include>
-                                    </includes>
-                                    <excludes>
-                                        <exclude>**/*.rocker.html</exclude>
-                                        <exclude>assets/**</exclude>
-                                    </excludes>
-                                </scanTargetPattern>
-                            </scanTargetPatterns>
-                            <systemProperties>
-                                <systemProperty>
-                                    <name>ninja.mode</name>
-                                    <value>dev</value>
-                                </systemProperty>
-                            </systemProperties>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>jetty-run</id>
                                 <phase>test</phase>
                                 <goals>
                                     <goal>run</goal>
@@ -193,13 +139,21 @@
         </dependency>
         
         <!-- fancy stuff for demo -->
+        
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>bootstrap</artifactId>
         </dependency>
+        
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>jquery</artifactId>
         </dependency>
+        
+        <dependency>
+            <groupId>com.fizzed</groupId>
+            <artifactId>ninja-undertow</artifactId>
+        </dependency>
+        
     </dependencies>
 </project>

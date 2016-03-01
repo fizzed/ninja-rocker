@@ -17,8 +17,7 @@ public class blaze {
     static private final Logger log = Contexts.logger();
 
     public void demo() {
-        exec("mvn", "-Pninja-run", "test")
-            .run();
+        exec("mvn", "-Procker-demo-run", "-Dninja.mainClass=ninja.undertow.NinjaUndertow").run();
     }
     
     private String latest_tag() {

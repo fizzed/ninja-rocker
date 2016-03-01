@@ -1,6 +1,12 @@
 Ninja Framework + Rocker Templates by Fizzed
 ============================================
 
+#### 0.12.1 - 2016-03-01
+
+ - `TemplateEngineRocker` includes a `Content-Length` header since the size of
+    the response is known (and usually web containers can optimize for it)
+ - Tweaked project build
+
 #### 0.12.0 - 2016-02-04
 
  - Bump to Rocker v0.11.1
