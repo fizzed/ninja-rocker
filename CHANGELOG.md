@@ -1,6 +1,10 @@
 Ninja Framework + Rocker Templates by Fizzed
 ============================================
 
+#### 0.12.2 - 2016-03-10
+
+ - Guice bindings modified for compat w/ ninja v5.4.0
+
 #### 0.12.1 - 2016-03-01
 
  - `TemplateEngineRocker` includes a `Content-Length` header since the size of
