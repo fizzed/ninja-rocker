@@ -8,7 +8,7 @@
     <properties>
         <java.version>1.7</java.version>
         <ninja.version>5.3.1</ninja.version>
-        <rocker.version>0.11.1</rocker.version>
+        <rocker.version>0.14.0</rocker.version>
         <!-- workaround travis ci maven version requirement -->
         <maven.enforce.version>3.2.5</maven.enforce.version>
     </properties>
@@ -16,7 +16,7 @@
     <parent>
         <groupId>com.fizzed</groupId>
         <artifactId>maven-parent</artifactId>
-        <version>2.0.3</version>
+        <version>2.1.0</version>
     </parent>
     
     <scm>

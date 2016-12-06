@@ -1,6 +1,10 @@
 Ninja Framework + Rocker Templates by Fizzed
 ============================================
 
+#### 0.13.0 - 2016-12-06
+
+ - Bump to Rocker v0.14.0
+
 #### 0.12.2 - 2016-03-10
 
  - Guice bindings modified for compat w/ ninja v5.4.0
