@@ -17,8 +17,6 @@ package com.fizzed.ninja.rocker;
 
 import java.util.HashMap;
 import ninja.NinjaTest;
-import ninja.utils.NinjaTestBrowser;
-import ninja.utils.NinjaTestServer;
 import ninja.utils.SwissKnife;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;

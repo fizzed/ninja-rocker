@@ -39,6 +39,7 @@ import ninja.utils.NinjaProperties;
 import org.slf4j.Logger;
 
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.google.inject.Provider;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -68,6 +69,7 @@ public class TemplateEngineRocker implements TemplateEngine {
     private final String contentType;
     private final Map<String, Class<? extends DefaultRockerModel>> commonErrorTemplates;
     
+    private final Injector injector;
     private final Router router;
     private final Messages messages;
     private final NinjaProperties ninjaProperties;
@@ -76,12 +78,14 @@ public class TemplateEngineRocker implements TemplateEngine {
     private final NinjaRockerFactory ninjaRockerFactory;
     
     @Inject
-    public TemplateEngineRocker(Router router,
+    public TemplateEngineRocker(Injector injector,
+                                Router router,
                                 Messages messages,
                                 NinjaProperties ninjaProperties,
                                 Provider<Lang> langProvider,
                                 TemplateEngineHelper templateEngineHelper,
                                 NinjaRockerFactory ninjaRockerFactory) throws Exception {
+        this.injector = injector;
         this.router = router;
         this.messages = messages;
         this.ninjaProperties = ninjaProperties;
@@ -251,7 +255,7 @@ public class TemplateEngineRocker implements TemplateEngine {
         // create the 'N' variable
         final DefaultNinjaRocker N
             = this.ninjaRockerFactory.create(
-                ninjaProperties, router, messages, langProvider.get(), context, result);
+                injector, ninjaProperties, router, messages, langProvider.get(), context, result);
         
         // render the model using a specific output factory & template customizer
         ArrayOfByteArraysOutput out

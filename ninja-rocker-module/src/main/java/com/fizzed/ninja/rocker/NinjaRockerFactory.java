@@ -16,6 +16,7 @@
 package com.fizzed.ninja.rocker;
 
 import com.google.inject.ImplementedBy;
+import com.google.inject.Injector;
 import ninja.Context;
 import ninja.Result;
 import ninja.Router;
@@ -31,7 +32,8 @@ import ninja.utils.NinjaProperties;
 @ImplementedBy(NinjaRockerFactoryImpl.class)
 public interface NinjaRockerFactory {
 
-    DefaultNinjaRocker create(NinjaProperties ninjaProperties,
+    DefaultNinjaRocker create(Injector injector,
+                              NinjaProperties ninjaProperties,
                               Router router,
                               Messages messages,
                               Lang ninjaLang,

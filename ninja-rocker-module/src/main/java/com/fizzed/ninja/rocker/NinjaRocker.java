@@ -18,6 +18,7 @@ package com.fizzed.ninja.rocker;
 import com.fizzed.rocker.RenderingException;
 import com.fizzed.rocker.runtime.Raw;
 import com.google.common.base.Optional;
+import com.google.inject.Injector;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
@@ -42,6 +43,7 @@ import org.ocpsoft.prettytime.PrettyTime;
 abstract public class NinjaRocker {
     
     // hidden to template during render (but accessible in DefaultNinjaRocker)
+    protected final Injector injector;
     protected final NinjaProperties ninjaProperties;
     protected final Router router;
     protected final Messages messages;
@@ -56,7 +58,8 @@ abstract public class NinjaRocker {
     public final Map<String,String> session;
     public final Map<String,String> flash;
     
-    public NinjaRocker(NinjaProperties ninjaProperties,
+    public NinjaRocker(Injector injector,
+                       NinjaProperties ninjaProperties,
                        Router router,
                        Messages messages,
                        Result result,
@@ -66,6 +69,7 @@ abstract public class NinjaRocker {
                        String lang,
                        Map<String,String> session,
                        Map<String,String> flash) {
+        this.injector = injector;
         this.ninjaProperties = ninjaProperties;
         this.router = router;
         this.messages = messages;

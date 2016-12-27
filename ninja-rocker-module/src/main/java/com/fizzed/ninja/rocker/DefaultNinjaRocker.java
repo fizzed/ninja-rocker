@@ -15,6 +15,7 @@
  */
 package com.fizzed.ninja.rocker;
 
+import com.google.inject.Injector;
 import java.util.Locale;
 import java.util.Map;
 import ninja.Context;
@@ -30,11 +31,16 @@ import ninja.utils.NinjaProperties;
  */
 public class DefaultNinjaRocker extends NinjaRocker {
 
-    public DefaultNinjaRocker(NinjaProperties ninjaProperties, Router router, Messages messages, Result result, Locale locale, Context context, String contextPath, String lang, Map<String, String> session, Map<String, String> flash) {
-        super(ninjaProperties, router, messages, result, locale, context, contextPath, lang, session, flash);
+    public DefaultNinjaRocker(Injector injector, NinjaProperties ninjaProperties, Router router, Messages messages, Result result, Locale locale, Context context, String contextPath, String lang, Map<String, String> session, Map<String, String> flash) {
+        super(injector, ninjaProperties, router, messages, result, locale, context, contextPath, lang, session, flash);
     }
     
-    // public access to variables hidden to templates by default
+    // these variables are hidden to templates since they get access to `NinjaRocker`
+    // while your template factory will pass a `DefaultNinjaRocker`.
+    
+    public Injector getInjector() {
+        return this.injector;
+    }
     
     public NinjaProperties getNinjaProperties() {
         return this.ninjaProperties;

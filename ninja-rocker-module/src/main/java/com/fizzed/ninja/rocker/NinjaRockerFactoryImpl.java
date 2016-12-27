@@ -17,6 +17,7 @@ package com.fizzed.ninja.rocker;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
+import com.google.inject.Injector;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.Map;
@@ -35,7 +36,8 @@ import ninja.utils.NinjaProperties;
 public class NinjaRockerFactoryImpl implements NinjaRockerFactory {
     
     @Override
-    public DefaultNinjaRocker create(NinjaProperties ninjaProperties,
+    public DefaultNinjaRocker create(Injector injector,
+                                     NinjaProperties ninjaProperties,
                                      Router router,
                                      Messages messages,
                                      Lang ninjaLang,
@@ -92,7 +94,7 @@ public class NinjaRockerFactoryImpl implements NinjaRockerFactory {
             }
         }
         
-        return new DefaultNinjaRocker(ninjaProperties, router, messages, result, locale, context, contextPath, lang, session, flash);
+        return new DefaultNinjaRocker(injector, ninjaProperties, router, messages, result, locale, context, contextPath, lang, session, flash);
     }
     
 }

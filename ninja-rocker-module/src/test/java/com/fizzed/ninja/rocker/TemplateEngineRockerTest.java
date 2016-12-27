@@ -17,16 +17,13 @@ package com.fizzed.ninja.rocker;
 
 import com.fizzed.rocker.RockerModel;
 import com.google.common.base.Optional;
+import com.google.inject.Injector;
 import com.google.inject.Provider;
 import custom.User;
 import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
-import java.io.Writer;
 import ninja.Context;
 import ninja.Result;
-import ninja.Route;
 import ninja.Router;
 import ninja.i18n.Lang;
 import ninja.i18n.Messages;
@@ -40,36 +37,34 @@ import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 import static org.mockito.Matchers.any;
-import org.mockito.Mock;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import org.mockito.MockitoAnnotations;
-import org.ocpsoft.prettytime.PrettyTime;
 
 public class TemplateEngineRockerTest {
     
-    @Mock
+    private Injector injector;
     private Router router;
-    @Mock
     private Messages messages;
-    @Mock
     private NinjaProperties ninjaProperties;
-    @Mock
     private Provider<Lang> langProvider;
-    @Mock
     private Lang lang;
-    @Mock
     private TemplateEngineHelper templateEngineHelper;
-    @Mock
     private Context context;
-    @Mock
     private Result result;
     private TemplateEngineRocker templateEngine;
     private ByteArrayOutputStream output;
     
     @Before
     public void before() throws Exception {
-        MockitoAnnotations.initMocks(this);
+        this.injector = mock(Injector.class);
+        this.router = mock(Router.class);
+        this.messages = mock(Messages.class);
+        this.ninjaProperties = mock(NinjaProperties.class);
+        this.langProvider = mock(Provider.class);
+        this.lang = mock(Lang.class);
+        this.templateEngineHelper = mock(TemplateEngineHelper.class);
+        this.context = mock(Context.class);
+        this.result = mock(Result.class);
         
         when(context.getContextPath()).thenReturn("");
         when(lang.getLanguage(context, Optional.of(result))).thenReturn(Optional.of("en"));
@@ -77,7 +72,7 @@ public class TemplateEngineRockerTest {
         
         final NinjaRockerFactory ninjaRockerFactory = new NinjaRockerFactoryImpl();
         
-        this.templateEngine = new TemplateEngineRocker(router, messages, ninjaProperties,
+        this.templateEngine = new TemplateEngineRocker(injector, router, messages, ninjaProperties,
                                                         langProvider, templateEngineHelper,
                                                         ninjaRockerFactory);
 

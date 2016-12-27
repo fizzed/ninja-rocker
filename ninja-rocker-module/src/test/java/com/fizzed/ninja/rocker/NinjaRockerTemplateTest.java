@@ -55,7 +55,7 @@ public class NinjaRockerTemplateTest {
                         this.__internal.setContentType(ContentType.HTML);
                         this.__internal.setTemplatePackageName("test");
                         this.__internal.setTemplateName("test");
-                        this.N = ninjaRockerFactory.create(null, null, null, ninjaLang, context, result);
+                        this.N = ninjaRockerFactory.create(null, null, null, null, ninjaLang, context, result);
                     }
                     
                     @Override
