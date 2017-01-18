@@ -1,6 +1,12 @@
 Ninja Framework + Rocker Templates by Fizzed
 ============================================
 
+#### 0.16.0 - 2017-01-18
+
+ - Bump to Ninja v6.0.0-beta2
+ - Bump to Rocker v0.15.0
+ - NOTE: this version is NOT compatible w/ Ninja v5 or lower
+
 #### 0.15.0 - 2016-12-27
 
  - Guice injector now available in `DefaultNinjaRocker`

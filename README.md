@@ -69,6 +69,11 @@ following in your shell (from the root project directory, not in `demo`):
 
 Once running, point your browser to http://localhost:8080/
 
+## Ninja 5 (or lower) support?
+
+Please use `ninja-rocker` v0.15.0 or below if you need to target an older version
+of Ninja.
+
 ## Setup
 
 ### Add dependency
