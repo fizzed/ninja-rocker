@@ -6,9 +6,9 @@
     <version>0.15.1-SNAPSHOT</version>
 
     <properties>
-        <java.version>1.7</java.version>
-        <ninja.version>5.3.1</ninja.version>
-        <rocker.version>0.14.0</rocker.version>
+        <java.version>1.8</java.version>
+        <ninja.version>6.0.0-beta2</ninja.version>
+        <rocker.version>0.15.0</rocker.version>
         <!-- workaround travis ci maven version requirement -->
         <maven.enforce.version>3.2.5</maven.enforce.version>
     </properties>
@@ -63,7 +63,7 @@
             <dependency>
                 <groupId>com.fizzed</groupId>
                 <artifactId>ninja-undertow</artifactId>
-                <version>5.3.1.undertow2</version>
+                <version>6.0.0-undertow1</version>
                 <scope>provided</scope>
             </dependency>
             

@@ -39,9 +39,7 @@ public class NinjaRockerIntegrationTest extends NinjaTest {
 
         assertThat(response.getFirstHeader("Content-Type").getValue().toLowerCase(), is("text/html; charset=utf-8"));
         assertThat(response.getFirstHeader("Content-Length"), is(not(nullValue())));
-        assertThat(
-            SwissKnife.convert(response.getFirstHeader("Content-Length").getValue(), Integer.class)
-            , greaterThan(0));
+        assertThat(Integer.valueOf(response.getFirstHeader("Content-Length").getValue()), greaterThan(0));
     }
     
     @Test
@@ -54,9 +52,7 @@ public class NinjaRockerIntegrationTest extends NinjaTest {
         assertThat(body, containsString("Hi!"));
         assertThat(response.getFirstHeader("Transfer-Encoding"), is(nullValue()));
         assertThat(response.getFirstHeader("Content-Length"), is(not(nullValue())));
-        assertThat(
-            SwissKnife.convert(response.getFirstHeader("Content-Length").getValue(), Integer.class)
-            , greaterThan(0));
+        assertThat(Integer.valueOf(response.getFirstHeader("Content-Length").getValue()), greaterThan(0));
     }
     
 }

@@ -17,11 +17,11 @@ package com.fizzed.ninja.rocker;
 
 import com.fizzed.rocker.RenderingException;
 import com.fizzed.rocker.runtime.Raw;
-import com.google.common.base.Optional;
 import com.google.inject.Injector;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import ninja.AssetsController;
 import ninja.Context;
 import ninja.Result;
@@ -126,16 +126,16 @@ abstract public class NinjaRocker {
     
     public String i18n(String messageKey) throws RenderingException {
         String messageValue = messages
-                .get(messageKey, context, Optional.of(result))
-                .or(messageKey);
+            .get(messageKey, context, Optional.of(result))
+            .orElse(messageKey);
         
         return messageValue;
     }
     
     public String i18n(String messageKey, Object... params) throws RenderingException {
         String messageValue = messages
-                .get(messageKey, context, Optional.of(result), params)
-                .or(messageKey);
+            .get(messageKey, context, Optional.of(result), params)
+            .orElse(messageKey);
 
         return messageValue;
     }

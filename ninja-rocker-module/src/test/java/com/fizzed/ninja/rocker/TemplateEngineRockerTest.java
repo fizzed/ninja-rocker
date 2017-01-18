@@ -16,12 +16,12 @@
 package com.fizzed.ninja.rocker;
 
 import com.fizzed.rocker.RockerModel;
-import com.google.common.base.Optional;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
 import custom.User;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Optional;
 import ninja.Context;
 import ninja.Result;
 import ninja.Router;

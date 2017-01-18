@@ -15,12 +15,12 @@
  */
 package com.fizzed.ninja.rocker;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
 import com.google.inject.Injector;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import ninja.Context;
 import ninja.Result;
 import ninja.Router;
