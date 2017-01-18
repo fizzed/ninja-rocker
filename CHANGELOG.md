@@ -6,6 +6,7 @@ Ninja Framework + Rocker Templates by Fizzed
  - Bump to Ninja v6.0.0-beta2
  - Bump to Rocker v0.15.0
  - NOTE: this version is NOT compatible w/ Ninja v5 or lower
+ - Java 8 now required (matches Ninja v6 requirement)
 
 #### 0.15.0 - 2016-12-27
 
