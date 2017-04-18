@@ -115,6 +115,22 @@ abstract public class NinjaRocker {
             methodName,
             params);
     }
+
+    public String reverseRoute(MethodReference methodReference) {
+        return router.getReverseRoute(methodReference);
+    }
+
+    public String reverseRoute(MethodReference methodReference, Map<String, Object> map) {
+        return router.getReverseRoute(methodReference,map);
+    }
+
+    public String reverseRoute(MethodReference methodReference, Object... objects) {
+        return router.getReverseRoute(methodReference, objects);
+    }
+
+    public String reverseRoute(MethodReference methodReference, Optional<Map<String, Object>> optional) {
+        return router.getReverseRoute(methodReference, optional);
+    }
     
     public String assetsAt(String file) {
         return reverseRoute(AssetsController.class, "serveStatic", "fileName", file);
